@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.SubjectsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_subjects"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="Subjects &amp; Topics"
+            app:titleTextColor="@color/white" 
+            app:navigationIcon="@android:drawable/ic_menu_revert" />
+            
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Empty State Text (Visible when list is empty) -->
+    <TextView
+        android:id="@+id/tv_empty_subjects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No subjects added yet. Tap + to add one."
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- RecyclerView for listing subjects -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_subjects"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_subject" />
+
+    <!-- Floating Action Button to add a new subject -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/white"
+        android:contentDescription="Add Subject" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
