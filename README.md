@@ -52,14 +52,18 @@
 ### 📅 Exam Timetable
 - Add upcoming exams with **subject, date, time, and venue/location**
 - Live **countdown** showing days remaining until each exam
-- Optional **notification reminder** one day before the exam
+- **Smart Staggered Notifications:** Reminders fire 1 day before, 1 hour before, and exactly at the exam start time
+- Instant "Exam Saved/Updated" confirmation notification
 - **Delete** exam entries with confirmation
 
 ### 📚 Study Materials
 - Add materials by **URL** (web link) or **local file** (picked from phone storage)
+- **Multi-File Selection:** Upload multiple files at once using the system document picker
+- **Foldering System:** Files are automatically grouped under custom folder titles. Expand/collapse folders for a clean UI
+- Rename folders and bulk-add additional files to existing folders
 - Tap any entry to open the URL in a browser or the file in the appropriate app
-- **Delete** materials with confirmation
 - Persistent URI permissions for local files
+- **Delete** entire groups or single files with confirmation
 
 ### 🎓 Subjects & Topics
 - Add subjects with auto-assigned **colour coding**
@@ -67,10 +71,17 @@
 - Mark topics as **completed** (with checkbox + strikethrough)
 - **Delete** subjects or individual topics with confirmation
 
+### ⚙️ Settings & Personalisation
+- **Theme Engine:** Switch instantly between System Default, Light, and Dark mode
+- **Multi-Language Support:** Change the app interface language (English, Swahili, French, Arabic, Spanish, Portuguese, Chinese) and apply it immediately without app restarts
+- **Custom Notification Sounds:** Pick your preferred ringtone for task and exam alerts natively
+- **Master Notifications Toggle:** Easily pause or resume all reminders globally
+
 ### 🔔 Smart Notifications
 - Notifications fire at the **exact time and day** you set
 - Uses `AlarmManager.setExactAndAllowWhileIdle` for precise delivery
-- Two notification channels: **Task Reminders** and **Exam Alerts**
+- Supports **custom sounds** and rich vibration patterns
+- Immediate fail-safe: if you set a reminder for a time that just passed, the app immediately alerts you
 - Proper runtime permission request on Android 13+
 
 ---
@@ -181,19 +192,22 @@ app/src/main/java/com/fussy/examfeverplanner/
 ├── viewmodel/           # ViewModels (TaskViewModel, ExamViewModel, …)
 │
 ├── ui/                  # Activities & Adapters
+│   ├── BaseActivity.java         # Locale wrapper for instant language switching
 │   ├── MainActivity.java
+│   ├── SettingsActivity.java     # Theme & Language config
 │   ├── TaskActivity.java / TaskAdapter.java
 │   ├── ExamActivity.java / ExamAdapter.java
-│   ├── MaterialActivity.java / MaterialAdapter.java
+│   ├── MaterialActivity.java / MaterialAdapter.java (Grouped expandable UI)
 │   ├── SubjectsActivity.java / SubjectAdapter.java
 │   └── TopicsActivity.java / TopicAdapter.java
 │
 └── utils/
-    ├── NotificationHelper.java   # Channel creation & alarm scheduling
-    └── AlarmReceiver.java        # BroadcastReceiver for notifications
+    ├── NotificationHelper.java   # Channel creation, alarm scheduling & instant alerts
+    ├── AlarmReceiver.java        # BroadcastReceiver for notifications
+    └── LocaleHelper.java         # Context wrapper for dynamic language runtime changes
 
 app/src/main/res/
-├── layout/              # XML layouts for activities and dialogs
+├── layout/              # XML layouts for activities and dialogs (e.g., grouped materials headers)
 ├── mipmap-*/            # App launcher icons (all densities)
 └── drawable/            # ic_notification.xml and other drawables
 ```
