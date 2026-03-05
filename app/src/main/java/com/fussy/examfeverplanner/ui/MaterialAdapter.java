@@ -1,7 +1,6 @@
 package com.fussy.examfeverplanner.ui;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,99 +15,284 @@ import com.fussy.examfeverplanner.R;
 import com.fussy.examfeverplanner.data.entity.StudyMaterial;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MaterialHolder> {
+/**
+ * Expandable grouped adapter for Study Materials.
+ *
+ * Display items are either:
+ * TYPE_GROUP — a collapsible header (groupName + file count)
+ * TYPE_FILE — an individual file child row (visible only when group is
+ * expanded)
+ */
+public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<StudyMaterial> materials = new ArrayList<>();
-    private OnDeleteListener deleteListener;
+    // ── View types ────────────────────────────────────────────────────────────
+    private static final int TYPE_GROUP = 0;
+    private static final int TYPE_FILE = 1;
 
-    public interface OnDeleteListener {
+    // ── Listener interfaces ───────────────────────────────────────────────────
+    public interface OnGroupDeleteListener {
+        void onDelete(String groupName);
+    }
+
+    public interface OnGroupEditListener {
+        void onEdit(String groupName, List<StudyMaterial> files);
+    }
+
+    public interface OnFileDeleteListener {
         void onDelete(StudyMaterial material);
     }
 
-    public void setDeleteListener(OnDeleteListener deleteListener) {
-        this.deleteListener = deleteListener;
+    public interface OnFileEditListener {
+        void onEdit(StudyMaterial material);
     }
 
-    @NonNull
-    @Override
-    public MaterialHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_material, parent, false);
-        return new MaterialHolder(itemView);
+    private OnGroupDeleteListener groupDeleteListener;
+    private OnGroupEditListener groupEditListener;
+    private OnFileDeleteListener fileDeleteListener;
+    private OnFileEditListener fileEditListener;
+
+    public void setGroupDeleteListener(OnGroupDeleteListener l) {
+        groupDeleteListener = l;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MaterialHolder holder, int position) {
-        StudyMaterial currentMaterial = materials.get(position);
-        holder.tvMaterialTitle.setText(currentMaterial.getTitle());
+    public void setGroupEditListener(OnGroupEditListener l) {
+        groupEditListener = l;
+    }
 
-        String pathOrUrl = currentMaterial.getFilePathOrUrl();
-        boolean isLocalFile = !currentMaterial.isLink();
+    public void setFileDeleteListener(OnFileDeleteListener l) {
+        fileDeleteListener = l;
+    }
 
-        if (isLocalFile) {
-            holder.tvMaterialDesc.setText("📄 Local File");
-            holder.ivMaterialType.setImageResource(android.R.drawable.ic_menu_save);
-        } else {
-            holder.tvMaterialDesc.setText(pathOrUrl);
-            holder.ivMaterialType.setImageResource(android.R.drawable.ic_menu_agenda);
+    public void setFileEditListener(OnFileEditListener l) {
+        fileEditListener = l;
+    }
+
+    // ── Internal display list item ────────────────────────────────────────────
+    private static class DisplayItem {
+        int type;
+        // For GROUP
+        String groupName;
+        List<StudyMaterial> groupFiles;
+        boolean expanded;
+        // For FILE
+        StudyMaterial material;
+
+        static DisplayItem group(String name, List<StudyMaterial> files) {
+            DisplayItem d = new DisplayItem();
+            d.type = TYPE_GROUP;
+            d.groupName = name;
+            d.groupFiles = new ArrayList<>(files);
+            d.expanded = false;
+            return d;
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            if (pathOrUrl == null || pathOrUrl.isEmpty())
-                return;
-            Intent openIntent;
-            if (isLocalFile) {
-                Uri uri = Uri.parse(pathOrUrl);
-                openIntent = new Intent(Intent.ACTION_VIEW);
-                openIntent.setDataAndType(uri, "*/*");
-                openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            } else {
-                String url = pathOrUrl;
-                if (!url.startsWith("http://") && !url.startsWith("https://"))
-                    url = "https://" + url;
-                openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            }
-            try {
-                v.getContext().startActivity(openIntent);
-            } catch (Exception ignored) {
-            }
-        });
+        static DisplayItem file(StudyMaterial m) {
+            DisplayItem d = new DisplayItem();
+            d.type = TYPE_FILE;
+            d.material = m;
+            return d;
+        }
+    }
 
-        holder.btnDelete.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
-                .setTitle("Delete Material")
-                .setMessage("Delete \"" + currentMaterial.getTitle() + "\"?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    if (deleteListener != null)
-                        deleteListener.onDelete(currentMaterial);
-                })
-                .setNegativeButton("Cancel", null)
-                .show());
+    // ── Data ─────────────────────────────────────────────────────────────────
+    /** Master list of all materials from DB (sorted by groupName, id) */
+    private List<StudyMaterial> allMaterials = new ArrayList<>();
+
+    /**
+     * Flat, ordered display list that the RecyclerView consumes.
+     * Re-built from allMaterials any time data changes.
+     */
+    private final List<DisplayItem> displayList = new ArrayList<>();
+
+    /** Tracks which groups the user has opened */
+    private final java.util.Set<String> expandedGroups = new java.util.HashSet<>();
+
+    // ── Public API ────────────────────────────────────────────────────────────
+
+    public void setMaterials(List<StudyMaterial> materials) {
+        allMaterials = materials != null ? materials : new ArrayList<>();
+        rebuildDisplayList();
+        notifyDataSetChanged();
+    }
+
+    // ── RecyclerView.Adapter overrides ────────────────────────────────────────
+
+    @Override
+    public int getItemViewType(int position) {
+        return displayList.get(position).type;
     }
 
     @Override
     public int getItemCount() {
-        return materials.size();
+        return displayList.size();
     }
 
-    public void setMaterials(List<StudyMaterial> materials) {
-        this.materials = materials;
-        notifyDataSetChanged();
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inf = LayoutInflater.from(parent.getContext());
+        if (viewType == TYPE_GROUP) {
+            View v = inf.inflate(R.layout.item_material_group, parent, false);
+            return new GroupViewHolder(v);
+        } else {
+            View v = inf.inflate(R.layout.item_material_file, parent, false);
+            return new FileViewHolder(v);
+        }
     }
 
-    class MaterialHolder extends RecyclerView.ViewHolder {
-        private final TextView tvMaterialTitle;
-        private final TextView tvMaterialDesc;
-        private final ImageView ivMaterialType;
-        private final ImageButton btnDelete;
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int pos) {
+        DisplayItem item = displayList.get(pos);
+        if (item.type == TYPE_GROUP) {
+            bindGroup((GroupViewHolder) holder, item, pos);
+        } else {
+            bindFile((FileViewHolder) holder, item);
+        }
+    }
 
-        public MaterialHolder(View itemView) {
-            super(itemView);
-            tvMaterialTitle = itemView.findViewById(R.id.tv_material_title);
-            tvMaterialDesc = itemView.findViewById(R.id.tv_material_desc);
-            ivMaterialType = itemView.findViewById(R.id.iv_material_type);
-            btnDelete = itemView.findViewById(R.id.btn_delete_material);
+    // ── Bind helpers ──────────────────────────────────────────────────────────
+
+    private void bindGroup(GroupViewHolder h, DisplayItem item, int pos) {
+        h.tvGroupName.setText(item.groupName);
+        int count = item.groupFiles.size();
+        h.tvFileCount.setText(count + (count == 1 ? " file" : " files"));
+
+        // Animate chevron
+        float rotation = item.expanded ? 180f : 0f;
+        h.ivChevron.setRotation(rotation);
+
+        // Toggle expand/collapse on header click
+        h.itemView.setOnClickListener(v -> {
+            int adPos = h.getAdapterPosition();
+            if (adPos == RecyclerView.NO_POSITION)
+                return;
+            DisplayItem di = displayList.get(adPos);
+            if (di.expanded) {
+                collapseGroup(adPos, di);
+            } else {
+                expandGroup(adPos, di);
+            }
+            // Animate chevron
+            ObjectAnimator.ofFloat(h.ivChevron, "rotation",
+                    di.expanded ? 0f : 180f, di.expanded ? 180f : 0f)
+                    .setDuration(200).start();
+        });
+
+        h.btnEditGroup.setOnClickListener(v -> {
+            if (groupEditListener != null)
+                groupEditListener.onEdit(item.groupName, item.groupFiles);
+        });
+
+        h.btnDeleteGroup.setOnClickListener(v -> {
+            if (groupDeleteListener != null)
+                groupDeleteListener.onDelete(item.groupName);
+        });
+    }
+
+    private void bindFile(FileViewHolder h, DisplayItem item) {
+        StudyMaterial m = item.material;
+        String display = m.getTitle() != null && !m.getTitle().isEmpty()
+                ? m.getTitle()
+                : m.getFilePathOrUrl();
+        h.tvFileName.setText(display);
+
+        // Different icon for links vs files
+        h.ivFileIcon.setImageResource(m.isLink()
+                ? android.R.drawable.ic_menu_share
+                : android.R.drawable.ic_menu_save);
+
+        h.btnDeleteFile.setOnClickListener(v -> {
+            if (fileDeleteListener != null)
+                fileDeleteListener.onDelete(m);
+        });
+
+        h.btnEditFile.setOnClickListener(v -> {
+            if (fileEditListener != null)
+                fileEditListener.onEdit(m);
+        });
+    }
+
+    // ── Expand / Collapse ─────────────────────────────────────────────────────
+
+    private void expandGroup(int groupPos, DisplayItem groupItem) {
+        groupItem.expanded = true;
+        expandedGroups.add(groupItem.groupName);
+        int insertAt = groupPos + 1;
+        for (StudyMaterial m : groupItem.groupFiles) {
+            displayList.add(insertAt, DisplayItem.file(m));
+            notifyItemInserted(insertAt);
+            insertAt++;
+        }
+        notifyItemChanged(groupPos); // refresh chevron
+    }
+
+    private void collapseGroup(int groupPos, DisplayItem groupItem) {
+        groupItem.expanded = false;
+        expandedGroups.remove(groupItem.groupName);
+        int toRemove = groupItem.groupFiles.size();
+        for (int i = 0; i < toRemove; i++) {
+            displayList.remove(groupPos + 1);
+            notifyItemRemoved(groupPos + 1);
+        }
+        notifyItemChanged(groupPos); // refresh chevron
+    }
+
+    // ── Display-list builder ──────────────────────────────────────────────────
+
+    private void rebuildDisplayList() {
+        displayList.clear();
+
+        // Group materials by groupName (preserve insertion order)
+        LinkedHashMap<String, List<StudyMaterial>> grouped = new LinkedHashMap<>();
+        for (StudyMaterial m : allMaterials) {
+            String key = m.getGroupName() != null ? m.getGroupName() : m.getTitle();
+            grouped.computeIfAbsent(key, k -> new ArrayList<>()).add(m);
+        }
+
+        for (Map.Entry<String, List<StudyMaterial>> entry : grouped.entrySet()) {
+            DisplayItem header = DisplayItem.group(entry.getKey(), entry.getValue());
+            header.expanded = expandedGroups.contains(entry.getKey());
+            displayList.add(header);
+            if (header.expanded) {
+                for (StudyMaterial m : entry.getValue()) {
+                    displayList.add(DisplayItem.file(m));
+                }
+            }
+        }
+    }
+
+    // ── ViewHolders ───────────────────────────────────────────────────────────
+
+    static class GroupViewHolder extends RecyclerView.ViewHolder {
+        TextView tvGroupName, tvFileCount;
+        ImageView ivChevron;
+        ImageButton btnEditGroup, btnDeleteGroup;
+
+        GroupViewHolder(View v) {
+            super(v);
+            tvGroupName = v.findViewById(R.id.tv_group_name);
+            tvFileCount = v.findViewById(R.id.tv_file_count);
+            ivChevron = v.findViewById(R.id.iv_chevron);
+            btnEditGroup = v.findViewById(R.id.btn_edit_group);
+            btnDeleteGroup = v.findViewById(R.id.btn_delete_group);
+        }
+    }
+
+    static class FileViewHolder extends RecyclerView.ViewHolder {
+        TextView tvFileName;
+        ImageView ivFileIcon;
+        ImageButton btnDeleteFile, btnEditFile;
+
+        FileViewHolder(View v) {
+            super(v);
+            tvFileName = v.findViewById(R.id.tv_file_name);
+            ivFileIcon = v.findViewById(R.id.iv_file_icon);
+            btnDeleteFile = v.findViewById(R.id.btn_delete_file);
+            btnEditFile = v.findViewById(R.id.btn_edit_file);
         }
     }
 }

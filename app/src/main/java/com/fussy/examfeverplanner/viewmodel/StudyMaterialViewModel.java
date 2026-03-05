@@ -33,4 +33,8 @@ public class StudyMaterialViewModel extends AndroidViewModel {
     public void delete(StudyMaterial material) {
         repository.delete(material);
     }
+
+    public void deleteByGroup(String groupName, int subjectId) {
+        repository.deleteByGroup(groupName, subjectId);
+    }
 }

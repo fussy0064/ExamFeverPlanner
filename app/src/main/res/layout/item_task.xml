@@ -53,6 +53,15 @@
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/btn_edit_task"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_edit"
+            app:tint="#4CAF50"
+            android:contentDescription="Edit task" />
+
+        <ImageButton
             android:id="@+id/btn_delete_task"
             android:layout_width="36dp"
             android:layout_height="36dp"

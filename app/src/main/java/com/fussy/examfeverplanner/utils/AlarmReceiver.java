@@ -6,12 +6,16 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
 import com.fussy.examfeverplanner.MainActivity;
 import com.fussy.examfeverplanner.R;
+import com.fussy.examfeverplanner.ui.SettingsActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -27,7 +31,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         String channelId = intent.getStringExtra(EXTRA_CHANNEL_ID);
         int notifId = intent.getIntExtra(EXTRA_NOTIF_ID, 0);
 
-        // Tap-to-open intent → opens MainActivity
+        // Check if notifications are enabled in Settings
+        SharedPreferences prefs = context.getSharedPreferences(
+                SettingsActivity.PREF_FILE, Context.MODE_PRIVATE);
+        boolean notifOn = prefs.getBoolean(SettingsActivity.KEY_NOTIF_ON, true);
+        if (!notifOn)
+            return;
+
+        // Tap-to-open → MainActivity
         Intent openIntent = new Intent(context, MainActivity.class);
         openIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         int piFlags = PendingIntent.FLAG_UPDATE_CURRENT;
@@ -35,18 +46,25 @@ public class AlarmReceiver extends BroadcastReceiver {
             piFlags |= PendingIntent.FLAG_IMMUTABLE;
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId, openIntent, piFlags);
 
-        Notification notification = new NotificationCompat.Builder(context, channelId)
+        // Pick user's chosen sound or system default
+        String savedUri = prefs.getString(SettingsActivity.KEY_NOTIF_URI, null);
+        Uri soundUri = (savedUri != null)
+                ? Uri.parse(savedUri)
+                : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setSound(soundUri)
+                .setVibrate(new long[] { 0, 300, 200, 300 })
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .build();
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm != null)
-            nm.notify(notifId, notification);
+            nm.notify(notifId, builder.build());
     }
 }

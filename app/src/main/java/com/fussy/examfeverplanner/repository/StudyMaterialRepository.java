@@ -2,7 +2,6 @@ package com.fussy.examfeverplanner.repository;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.fussy.examfeverplanner.data.dao.StudyMaterialDao;
 import com.fussy.examfeverplanner.data.database.AppDatabase;
@@ -35,12 +34,11 @@ public class StudyMaterialRepository {
         databaseWriteExecutor.execute(() -> materialDao.delete(material));
     }
 
+    public void deleteByGroup(String groupName, int subjectId) {
+        databaseWriteExecutor.execute(() -> materialDao.deleteByGroup(groupName, subjectId));
+    }
+
     public LiveData<List<StudyMaterial>> getMaterialsBySubject(int subjectId) {
-        MutableLiveData<List<StudyMaterial>> materialsData = new MutableLiveData<>();
-        databaseWriteExecutor.execute(() -> {
-            List<StudyMaterial> materials = materialDao.getMaterialsBySubject(subjectId);
-            materialsData.postValue(materials);
-        });
-        return materialsData;
+        return materialDao.getMaterialsBySubjectLive(subjectId);
     }
 }

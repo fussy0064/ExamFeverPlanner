@@ -1,5 +1,6 @@
 package com.fussy.examfeverplanner.data.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,8 +22,9 @@ public interface TopicDao {
     @Delete
     void delete(Topic topic);
 
-    @Query("SELECT * FROM topics WHERE subjectId = :subjectId")
-    List<Topic> getTopicsBySubject(int subjectId);
+    /** Room reactively pushes changes when topics are added/edited/deleted */
+    @Query("SELECT * FROM topics WHERE subjectId = :subjectId ORDER BY isCompleted ASC, id ASC")
+    LiveData<List<Topic>> getTopicsBySubjectLive(int subjectId);
 
     @Query("SELECT COUNT(*) FROM topics WHERE subjectId = :subjectId")
     int getTotalTopics(int subjectId);

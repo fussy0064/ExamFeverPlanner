@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="56dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- File type icon -->
+    <ImageView
+        android:id="@+id/iv_file_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/ic_menu_save"
+        app:tint="?attr/colorPrimary"
+        android:layout_marginEnd="10dp" />
+
+    <!-- File name/path -->
+    <TextView
+        android:id="@+id/tv_file_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="filename.pdf"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="middle" />
+
+    <!-- Edit single file -->
+    <ImageButton
+        android:id="@+id/btn_edit_file"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_edit"
+        app:tint="#4CAF50"
+        android:contentDescription="Edit file" />
+
+    <!-- Delete single file -->
+    <ImageButton
+        android:id="@+id/btn_delete_file"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_delete"
+        app:tint="#F44336"
+        android:contentDescription="Delete file" />
+
+</LinearLayout>

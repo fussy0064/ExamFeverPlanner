@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Random;
 
-public class SubjectsActivity extends AppCompatActivity {
+public class SubjectsActivity extends BaseActivity {
 
     private SubjectViewModel subjectViewModel;
 
@@ -28,21 +28,18 @@ public class SubjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subjects);
 
-        // Toolbar with Back Button
         Toolbar toolbar = findViewById(R.id.toolbar_subjects);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(v -> finish()); // Handle back press
+        toolbar.setNavigationOnClickListener(v -> finish());
 
-        // UI Elements
         TextView tvEmpty = findViewById(R.id.tv_empty_subjects);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_subjects);
         FloatingActionButton fabAdd = findViewById(R.id.fab_add_subject);
 
-        // Setup RecyclerView & Adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         final SubjectAdapter adapter = new SubjectAdapter(subject -> {
             Intent intent = new Intent(SubjectsActivity.this, TopicsActivity.class);
@@ -51,9 +48,9 @@ public class SubjectsActivity extends AppCompatActivity {
             startActivity(intent);
         });
         adapter.setDeleteListener(subject -> subjectViewModel.delete(subject));
+        adapter.setEditListener(subject -> showEditSubjectDialog(subject));
         recyclerView.setAdapter(adapter);
 
-        // ViewModel Setup
         subjectViewModel = new ViewModelProvider(this).get(SubjectViewModel.class);
         subjectViewModel.getAllSubjects().observe(this, subjects -> {
             if (subjects != null && !subjects.isEmpty()) {
@@ -66,7 +63,6 @@ public class SubjectsActivity extends AppCompatActivity {
             }
         });
 
-        // Setup Floating Action Button
         fabAdd.setOnClickListener(v -> showAddSubjectDialog());
     }
 
@@ -87,6 +83,33 @@ public class SubjectsActivity extends AppCompatActivity {
 
                 Subject newSubject = new Subject(subjectName, randomColor);
                 subjectViewModel.insert(newSubject);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+    /** Edit dialog — lets user rename the subject */
+    private void showEditSubjectDialog(Subject subject) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_subject, null);
+        builder.setView(dialogView);
+
+        // Change heading label if it exists
+        TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_subject_title);
+        if (tvHeading != null)
+            tvHeading.setText("Edit Subject");
+
+        TextInputEditText editTextSubjectName = dialogView.findViewById(R.id.edit_text_subject_name);
+        editTextSubjectName.setText(subject.getName());
+        editTextSubjectName.setSelection(subject.getName().length());
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String newName = editTextSubjectName.getText().toString().trim();
+            if (!newName.isEmpty()) {
+                subject.setName(newName);
+                subjectViewModel.update(subject);
             }
         });
 

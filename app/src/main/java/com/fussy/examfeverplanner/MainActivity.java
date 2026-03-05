@@ -1,11 +1,15 @@
 package com.fussy.examfeverplanner;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+
 import com.google.android.material.button.MaterialButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +17,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.fussy.examfeverplanner.ui.SettingsActivity;
+import com.fussy.examfeverplanner.utils.LocaleHelper;
 import com.fussy.examfeverplanner.utils.NotificationHelper;
 import com.fussy.examfeverplanner.viewmodel.TaskViewModel;
 
@@ -22,14 +28,20 @@ public class MainActivity extends AppCompatActivity {
     private TaskViewModel taskViewModel;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Restore user's saved theme before inflating any layout
+        SettingsActivity.applyStoredTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create notification channels (safe to call repeatedly)
         NotificationHelper.createNotificationChannels(this);
 
-        // Request POST_NOTIFICATIONS permission on Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -39,11 +51,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Bind ViewModel Data to UI
         TextView summaryText = findViewById(R.id.tv_tasks_summary);
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             if (tasks != null && !tasks.isEmpty()) {
                 summaryText.setText("You have " + tasks.size() + " pending tasks.");
             } else {
-                summaryText.setText("All caught up! No pending tasks.");
+                summaryText.setText("All caught up! No pending tasks. 🎉");
             }
         });
 
@@ -70,5 +80,20 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton btnMaterials = findViewById(R.id.btn_materials);
         btnMaterials.setOnClickListener(v -> startActivity(
                 new Intent(MainActivity.this, com.fussy.examfeverplanner.ui.MaterialActivity.class)));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fussy.examfeverplanner.R;
@@ -26,6 +27,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
     private List<Task> tasks = new ArrayList<>();
     private final OnItemClickListener listener;
     private OnDeleteListener deleteListener;
+    private OnEditListener editListener;
 
     public interface OnItemClickListener {
         void onCheckboxClick(Task task, boolean isChecked);
@@ -35,12 +37,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         void onDelete(Task task);
     }
 
+    public interface OnEditListener {
+        void onEdit(Task task);
+    }
+
     public TaskAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     public void setDeleteListener(OnDeleteListener deleteListener) {
         this.deleteListener = deleteListener;
+    }
+
+    public void setEditListener(OnEditListener editListener) {
+        this.editListener = editListener;
     }
 
     @NonNull
@@ -82,11 +92,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
                 .setMessage("Delete \"" + currentTask.getTitle() + "\"?")
                 .setPositiveButton("Delete", (dialog, which) -> {
                     NotificationHelper.cancelAlarm(v.getContext(), currentTask.getId());
+                    int pos = holder.getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        tasks.remove(pos);
+                        notifyItemRemoved(pos);
+                    }
                     if (deleteListener != null)
                         deleteListener.onDelete(currentTask);
                 })
                 .setNegativeButton("Cancel", null)
                 .show());
+
+        holder.btnEdit.setOnClickListener(v -> {
+            if (editListener != null)
+                editListener.onEdit(currentTask);
+        });
     }
 
     private void updateStrikeThrough(TextView tv, boolean isCompleted) {
@@ -102,9 +122,35 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         return tasks.size();
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-        notifyDataSetChanged();
+    public void setTasks(List<Task> newTasks) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return tasks.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newTasks.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int o, int n) {
+                return tasks.get(o).getId() == newTasks.get(n).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int o, int n) {
+                Task a = tasks.get(o), b = newTasks.get(n);
+                return a.getTitle().equals(b.getTitle())
+                        && a.getReminderTime() == b.getReminderTime()
+                        && a.isCompleted() == b.isCompleted()
+                        && (a.getDescription() == null ? b.getDescription() == null
+                                : a.getDescription().equals(b.getDescription()));
+            }
+        });
+        tasks = new ArrayList<>(newTasks);
+        result.dispatchUpdatesTo(this);
     }
 
     public Task getTaskAt(int position) {
@@ -117,6 +163,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         private final TextView tvTaskDate;
         private final CheckBox checkboxTask;
         private final ImageButton btnDelete;
+        private final ImageButton btnEdit;
 
         public TaskHolder(View itemView) {
             super(itemView);
@@ -125,6 +172,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
             tvTaskDate = itemView.findViewById(R.id.tv_task_date);
             checkboxTask = itemView.findViewById(R.id.checkbox_task);
             btnDelete = itemView.findViewById(R.id.btn_delete_task);
+            btnEdit = itemView.findViewById(R.id.btn_edit_task);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.fussy.examfeverplanner.repository;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.fussy.examfeverplanner.data.dao.TaskDao;
 import com.fussy.examfeverplanner.data.database.AppDatabase;
@@ -32,10 +31,6 @@ public class TaskRepository {
         databaseWriteExecutor.execute(() -> taskDao.insert(task));
     }
 
-    /**
-     * Insert task and return the auto-generated ID via callback on a background
-     * thread.
-     */
     public void insertAndThen(Task task, InsertCallback callback) {
         databaseWriteExecutor.execute(() -> {
             long rowId = taskDao.insertReturnId(task);
@@ -52,12 +47,18 @@ public class TaskRepository {
         databaseWriteExecutor.execute(() -> taskDao.delete(task));
     }
 
+    /**
+     * Returns a Room-backed LiveData that auto-updates whenever the tasks
+     * table changes (insert / update / delete). All tasks are included so
+     * the UI can show both pending and completed items and react instantly to
+     * checkbox changes.
+     */
+    public LiveData<List<Task>> getAllTasksLive() {
+        return taskDao.getAllTasksLive();
+    }
+
+    /** Only pending (incomplete) tasks — also live. */
     public LiveData<List<Task>> getPendingTasks() {
-        MutableLiveData<List<Task>> pendingTasksData = new MutableLiveData<>();
-        databaseWriteExecutor.execute(() -> {
-            List<Task> pendingTasks = taskDao.getPendingTasks();
-            pendingTasksData.postValue(pendingTasks);
-        });
-        return pendingTasksData;
+        return taskDao.getPendingTasksLive();
     }
 }

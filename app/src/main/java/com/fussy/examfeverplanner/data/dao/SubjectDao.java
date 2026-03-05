@@ -1,5 +1,6 @@
 package com.fussy.examfeverplanner.data.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,8 +22,9 @@ public interface SubjectDao {
     @Delete
     void delete(Subject subject);
 
-    @Query("SELECT * FROM subjects")
-    List<Subject> getAllSubjects();
+    /** Room reactively updates observers on insert/update/delete */
+    @Query("SELECT * FROM subjects ORDER BY name ASC")
+    LiveData<List<Subject>> getAllSubjectsLive();
 
     @Query("SELECT * FROM subjects WHERE id = :id")
     Subject getSubjectById(int id);

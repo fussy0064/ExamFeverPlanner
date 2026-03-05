@@ -18,7 +18,7 @@ import com.fussy.examfeverplanner.data.entity.Task;
 import com.fussy.examfeverplanner.data.entity.Topic;
 
 @Database(entities = { Subject.class, Task.class, Exam.class, Topic.class,
-        StudyMaterial.class }, version = 2, exportSchema = false)
+        StudyMaterial.class }, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;

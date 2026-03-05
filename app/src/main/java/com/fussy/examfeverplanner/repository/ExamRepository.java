@@ -2,7 +2,6 @@ package com.fussy.examfeverplanner.repository;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.fussy.examfeverplanner.data.dao.ExamDao;
 import com.fussy.examfeverplanner.data.database.AppDatabase;
@@ -35,12 +34,8 @@ public class ExamRepository {
         databaseWriteExecutor.execute(() -> examDao.delete(exam));
     }
 
+    /** Room-backed LiveData — auto-refreshes on any table change */
     public LiveData<List<Exam>> getAllExams() {
-        MutableLiveData<List<Exam>> examsData = new MutableLiveData<>();
-        databaseWriteExecutor.execute(() -> {
-            List<Exam> exams = examDao.getAllExams();
-            examsData.postValue(exams);
-        });
-        return examsData;
+        return examDao.getAllExamsLive();
     }
 }

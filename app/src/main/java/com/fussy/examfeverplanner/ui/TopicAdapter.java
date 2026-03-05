@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fussy.examfeverplanner.R;
@@ -23,6 +24,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
     private List<Topic> topics = new ArrayList<>();
     private final OnItemClickListener listener;
     private OnDeleteListener deleteListener;
+    private OnEditListener editListener;
 
     public interface OnItemClickListener {
         void onCheckboxClick(Topic topic, boolean isChecked);
@@ -32,12 +34,20 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         void onDelete(Topic topic);
     }
 
+    public interface OnEditListener {
+        void onEdit(Topic topic);
+    }
+
     public TopicAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     public void setDeleteListener(OnDeleteListener deleteListener) {
         this.deleteListener = deleteListener;
+    }
+
+    public void setEditListener(OnEditListener editListener) {
+        this.editListener = editListener;
     }
 
     @NonNull
@@ -69,11 +79,21 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
                 .setTitle("Delete Topic")
                 .setMessage("Delete \"" + currentTopic.getName() + "\"?")
                 .setPositiveButton("Delete", (dialog, which) -> {
+                    int pos = holder.getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        topics.remove(pos);
+                        notifyItemRemoved(pos);
+                    }
                     if (deleteListener != null)
                         deleteListener.onDelete(currentTopic);
                 })
                 .setNegativeButton("Cancel", null)
                 .show());
+
+        holder.btnEdit.setOnClickListener(v -> {
+            if (editListener != null)
+                editListener.onEdit(currentTopic);
+        });
     }
 
     private void updateStrikeThrough(TextView tv, boolean isCompleted) {
@@ -89,21 +109,45 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         return topics.size();
     }
 
-    public void setTopics(List<Topic> topics) {
-        this.topics = topics;
-        notifyDataSetChanged();
+    public void setTopics(List<Topic> newTopics) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return topics.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newTopics.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int o, int n) {
+                return topics.get(o).getId() == newTopics.get(n).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int o, int n) {
+                Topic a = topics.get(o), b = newTopics.get(n);
+                return a.getName().equals(b.getName()) && a.isCompleted() == b.isCompleted();
+            }
+        });
+        topics = new ArrayList<>(newTopics);
+        result.dispatchUpdatesTo(this);
     }
 
     class TopicHolder extends RecyclerView.ViewHolder {
         private final TextView tvTopicName;
         private final CheckBox checkboxTopic;
         private final ImageButton btnDelete;
+        private final ImageButton btnEdit;
 
         public TopicHolder(View itemView) {
             super(itemView);
             tvTopicName = itemView.findViewById(R.id.tv_topic_name);
             checkboxTopic = itemView.findViewById(R.id.checkbox_topic);
             btnDelete = itemView.findViewById(R.id.btn_delete_topic);
+            btnEdit = itemView.findViewById(R.id.btn_edit_topic);
         }
     }
 }

@@ -57,6 +57,11 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
         <!-- Alarm BroadcastReceiver for task/exam notifications -->
         <receiver
             android:name=".utils.AlarmReceiver"

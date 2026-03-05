@@ -43,6 +43,15 @@
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/btn_edit_subject"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_edit"
+            app:tint="#FFFFFF"
+            android:contentDescription="Edit subject" />
+
+        <ImageButton
             android:id="@+id/btn_delete_subject"
             android:layout_width="36dp"
             android:layout_height="36dp"

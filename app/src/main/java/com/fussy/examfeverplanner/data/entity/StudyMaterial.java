@@ -8,27 +8,76 @@ public class StudyMaterial {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    
+
+    /** User-visible title for this individual file/link */
     private String title;
+
     private String filePathOrUrl;
     private int subjectId;
     private boolean isLink;
 
-    public StudyMaterial(String title, String filePathOrUrl, int subjectId, boolean isLink) {
+    /**
+     * The "folder" name that groups related files together.
+     * All files uploaded under the same topic share the same groupName.
+     * For a lone URL the groupName equals the title.
+     */
+    private String groupName;
+
+    public StudyMaterial(String title, String filePathOrUrl,
+            int subjectId, boolean isLink, String groupName) {
         this.title = title;
         this.filePathOrUrl = filePathOrUrl;
         this.subjectId = subjectId;
         this.isLink = isLink;
+        this.groupName = groupName;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getFilePathOrUrl() { return filePathOrUrl; }
-    public void setFilePathOrUrl(String filePathOrUrl) { this.filePathOrUrl = filePathOrUrl; }
-    public int getSubjectId() { return subjectId; }
-    public void setSubjectId(int subjectId) { this.subjectId = subjectId; }
-    public boolean isLink() { return isLink; }
-    public void setLink(boolean link) { isLink = link; }
+    // ─── Getters / Setters ──────────────────────────────────────────────────
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getFilePathOrUrl() {
+        return filePathOrUrl;
+    }
+
+    public void setFilePathOrUrl(String v) {
+        this.filePathOrUrl = v;
+    }
+
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int v) {
+        this.subjectId = v;
+    }
+
+    public boolean isLink() {
+        return isLink;
+    }
+
+    public void setLink(boolean v) {
+        isLink = v;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 }

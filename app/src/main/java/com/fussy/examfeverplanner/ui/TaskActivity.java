@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends BaseActivity {
 
     private TaskViewModel taskViewModel;
     private final Calendar selectedDateTime = Calendar.getInstance();
@@ -55,6 +55,7 @@ public class TaskActivity extends AppCompatActivity {
             taskViewModel.update(task);
         });
         adapter.setDeleteListener(task -> taskViewModel.delete(task));
+        adapter.setEditListener(task -> showEditTaskDialog(task));
         recyclerView.setAdapter(adapter);
 
         // Swipe left to delete
@@ -73,7 +74,7 @@ public class TaskActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(recyclerView);
 
-        taskViewModel.getPendingTasks().observe(this, tasks -> {
+        taskViewModel.getAllTasks().observe(this, tasks -> {
             if (tasks != null && !tasks.isEmpty()) {
                 tvEmpty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -98,7 +99,6 @@ public class TaskActivity extends AppCompatActivity {
         TextView btnPickDate = dialogView.findViewById(R.id.btn_pick_date);
         TextView btnPickTime = dialogView.findViewById(R.id.btn_pick_time);
 
-        // Reset calendar
         selectedDateTime.setTimeInMillis(System.currentTimeMillis());
 
         btnPickDate.setOnClickListener(v -> {
@@ -138,7 +138,6 @@ public class TaskActivity extends AppCompatActivity {
             newTask.setReminderTime(reminderMs);
 
             taskViewModel.insertAndThen(newTask, insertedId -> {
-                // Schedule notification
                 if (reminderMs > System.currentTimeMillis()) {
                     String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
                     NotificationHelper.scheduleAlarm(this, reminderMs,
@@ -148,6 +147,90 @@ public class TaskActivity extends AppCompatActivity {
                             "Reminder set for " + formatDateTime(reminderMs), Toast.LENGTH_LONG).show());
                 }
             });
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+    /**
+     * Edit dialog — pre-fills title, description and date/time from an existing
+     * Task
+     */
+    private void showEditTaskDialog(Task task) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_task, null);
+        builder.setView(dialogView);
+
+        // Update dialog heading if present
+        TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_task_title);
+        if (tvHeading != null)
+            tvHeading.setText("Edit Task");
+
+        TextInputEditText editTextTaskName = dialogView.findViewById(R.id.edit_text_task_name);
+        TextInputEditText editTextTaskDesc = dialogView.findViewById(R.id.edit_text_task_desc);
+        TextView tvPickedDateTime = dialogView.findViewById(R.id.tv_picked_date_time);
+        TextView btnPickDate = dialogView.findViewById(R.id.btn_pick_date);
+        TextView btnPickTime = dialogView.findViewById(R.id.btn_pick_time);
+
+        // Pre-fill existing values
+        editTextTaskName.setText(task.getTitle());
+        editTextTaskDesc.setText(task.getDescription() != null ? task.getDescription() : "");
+
+        // Use existing reminder time if set, else now
+        long existingMs = task.getReminderTime() > 0 ? task.getReminderTime() : System.currentTimeMillis();
+        selectedDateTime.setTimeInMillis(existingMs);
+        tvPickedDateTime.setText("⏰ " + formatDateTime(existingMs));
+
+        btnPickDate.setOnClickListener(v -> {
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    (view, year, month, day) -> {
+                        selectedDateTime.set(Calendar.YEAR, year);
+                        selectedDateTime.set(Calendar.MONTH, month);
+                        selectedDateTime.set(Calendar.DAY_OF_MONTH, day);
+                        refreshDateTimeLabel(tvPickedDateTime);
+                    },
+                    selectedDateTime.get(Calendar.YEAR),
+                    selectedDateTime.get(Calendar.MONTH),
+                    selectedDateTime.get(Calendar.DAY_OF_MONTH));
+            dpd.show();
+        });
+
+        btnPickTime.setOnClickListener(v -> new TimePickerDialog(this,
+                (view, hour, minute) -> {
+                    selectedDateTime.set(Calendar.HOUR_OF_DAY, hour);
+                    selectedDateTime.set(Calendar.MINUTE, minute);
+                    selectedDateTime.set(Calendar.SECOND, 0);
+                    refreshDateTimeLabel(tvPickedDateTime);
+                },
+                selectedDateTime.get(Calendar.HOUR_OF_DAY),
+                selectedDateTime.get(Calendar.MINUTE), false).show());
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String title = editTextTaskName.getText().toString().trim();
+            String desc = editTextTaskDesc.getText().toString().trim();
+            if (title.isEmpty()) {
+                Toast.makeText(this, "Please enter a task title", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            long newReminderMs = selectedDateTime.getTimeInMillis();
+
+            // Cancel the old alarm if any
+            NotificationHelper.cancelAlarm(this, task.getId());
+
+            task.setTitle(title);
+            task.setDescription(desc);
+            task.setDueDate(newReminderMs);
+            task.setReminderTime(newReminderMs);
+            taskViewModel.update(task);
+
+            // Re-schedule if in the future
+            if (newReminderMs > System.currentTimeMillis()) {
+                String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
+                NotificationHelper.scheduleAlarm(this, newReminderMs, task.getId(),
+                        "📋 Task Reminder: " + title, msg, NotificationHelper.CHANNEL_ID_TASKS);
+            }
+            Toast.makeText(this, "Task updated ✓", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());

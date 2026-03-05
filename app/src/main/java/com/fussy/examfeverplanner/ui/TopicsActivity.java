@@ -18,7 +18,7 @@ import com.fussy.examfeverplanner.viewmodel.TopicViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class TopicsActivity extends AppCompatActivity {
+public class TopicsActivity extends BaseActivity {
 
     public static final String EXTRA_SUBJECT_ID = "com.fussy.examfeverplanner.EXTRA_SUBJECT_ID";
     public static final String EXTRA_SUBJECT_NAME = "com.fussy.examfeverplanner.EXTRA_SUBJECT_NAME";
@@ -39,7 +39,6 @@ public class TopicsActivity extends AppCompatActivity {
         if (subjectName == null)
             subjectName = "Topics";
 
-        // Toolbar with Back Button
         Toolbar toolbar = findViewById(R.id.toolbar_topics);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -47,22 +46,20 @@ public class TopicsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(v -> finish()); // Handle back press
+        toolbar.setNavigationOnClickListener(v -> finish());
 
-        // UI Elements
         TextView tvEmpty = findViewById(R.id.tv_empty_topics);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_topics);
         FloatingActionButton fabAdd = findViewById(R.id.fab_add_topic);
 
-        // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         final TopicAdapter adapter = new TopicAdapter((topic, isChecked) -> {
             topicViewModel.update(topic);
         });
         adapter.setDeleteListener(topic -> topicViewModel.delete(topic));
+        adapter.setEditListener(topic -> showEditTopicDialog(topic));
         recyclerView.setAdapter(adapter);
 
-        // ViewModel Setup
         topicViewModel = new ViewModelProvider(this).get(TopicViewModel.class);
         if (subjectId != -1) {
             topicViewModel.getTopicsBySubject(subjectId).observe(this, topics -> {
@@ -95,6 +92,33 @@ public class TopicsActivity extends AppCompatActivity {
             if (!topicName.isEmpty()) {
                 Topic newTopic = new Topic(topicName, subjectId);
                 topicViewModel.insert(newTopic);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+    /** Edit dialog — pre-fills the topic name */
+    private void showEditTopicDialog(Topic topic) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_topic, null);
+        builder.setView(dialogView);
+
+        // Update heading label if present
+        TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_topic_title);
+        if (tvHeading != null)
+            tvHeading.setText("Edit Topic");
+
+        TextInputEditText editTextTopicName = dialogView.findViewById(R.id.edit_text_topic_name);
+        editTextTopicName.setText(topic.getName());
+        editTextTopicName.setSelection(topic.getName().length()); // cursor at end
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String newName = editTextTopicName.getText().toString().trim();
+            if (!newName.isEmpty()) {
+                topic.setName(newName);
+                topicViewModel.update(topic);
             }
         });
 

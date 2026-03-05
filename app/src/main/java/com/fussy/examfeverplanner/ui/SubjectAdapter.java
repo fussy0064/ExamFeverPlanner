@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fussy.examfeverplanner.R;
@@ -23,6 +24,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     private List<Subject> subjects = new ArrayList<>();
     private final OnItemClickListener listener;
     private OnDeleteListener deleteListener;
+    private OnEditListener editListener;
 
     public interface OnItemClickListener {
         void onItemClick(Subject subject);
@@ -32,12 +34,20 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         void onDelete(Subject subject);
     }
 
+    public interface OnEditListener {
+        void onEdit(Subject subject);
+    }
+
     public SubjectAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     public void setDeleteListener(OnDeleteListener deleteListener) {
         this.deleteListener = deleteListener;
+    }
+
+    public void setEditListener(OnEditListener editListener) {
+        this.editListener = editListener;
     }
 
     @NonNull
@@ -73,11 +83,21 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                 .setTitle("Delete Subject")
                 .setMessage("Delete \"" + currentSubject.getName() + "\" and all its topics?")
                 .setPositiveButton("Delete", (dialog, which) -> {
+                    int pos = holder.getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        subjects.remove(pos);
+                        notifyItemRemoved(pos);
+                    }
                     if (deleteListener != null)
                         deleteListener.onDelete(currentSubject);
                 })
                 .setNegativeButton("Cancel", null)
                 .show());
+
+        holder.btnEdit.setOnClickListener(v -> {
+            if (editListener != null)
+                editListener.onEdit(currentSubject);
+        });
     }
 
     @Override
@@ -85,9 +105,33 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         return subjects.size();
     }
 
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
-        notifyDataSetChanged();
+    public void setSubjects(List<Subject> newSubjects) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return subjects.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newSubjects.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int o, int n) {
+                return subjects.get(o).getId() == newSubjects.get(n).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int o, int n) {
+                Subject a = subjects.get(o), b = newSubjects.get(n);
+                return a.getName().equals(b.getName())
+                        && (a.getColorHex() == null ? b.getColorHex() == null
+                                : a.getColorHex().equals(b.getColorHex()));
+            }
+        });
+        subjects = new ArrayList<>(newSubjects);
+        result.dispatchUpdatesTo(this);
     }
 
     public Subject getSubjectAt(int position) {
@@ -99,6 +143,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         private TextView tvTopicCount;
         private LinearLayout llSubjectBg;
         private ImageButton btnDelete;
+        private ImageButton btnEdit;
 
         public SubjectHolder(View itemView) {
             super(itemView);
@@ -106,6 +151,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             tvTopicCount = itemView.findViewById(R.id.tv_topic_count);
             llSubjectBg = itemView.findViewById(R.id.ll_subject_bg);
             btnDelete = itemView.findViewById(R.id.btn_delete_subject);
+            btnEdit = itemView.findViewById(R.id.btn_edit_subject);
         }
     }
 }

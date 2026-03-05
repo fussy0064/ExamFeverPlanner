@@ -13,16 +13,24 @@ import java.util.List;
 public class TaskViewModel extends AndroidViewModel {
 
     private TaskRepository repository;
-    private LiveData<List<Task>> allPendingTasks;
+    private LiveData<List<Task>> allTasksLive;
+    private LiveData<List<Task>> pendingTasksLive;
 
     public TaskViewModel(@NonNull Application application) {
         super(application);
         repository = new TaskRepository(application);
-        allPendingTasks = repository.getPendingTasks();
+        allTasksLive = repository.getAllTasksLive();
+        pendingTasksLive = repository.getPendingTasks();
     }
 
+    /** All tasks (pending + done) — for TaskActivity list */
+    public LiveData<List<Task>> getAllTasks() {
+        return allTasksLive;
+    }
+
+    /** Only incomplete tasks — for the home screen summary */
     public LiveData<List<Task>> getPendingTasks() {
-        return allPendingTasks;
+        return pendingTasksLive;
     }
 
     public void insert(Task task) {
