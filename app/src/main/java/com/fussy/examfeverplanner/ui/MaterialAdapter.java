@@ -50,10 +50,15 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onEdit(StudyMaterial material);
     }
 
+    public interface OnFileClickListener {
+        void onClick(StudyMaterial material);
+    }
+
     private OnGroupDeleteListener groupDeleteListener;
     private OnGroupEditListener groupEditListener;
     private OnFileDeleteListener fileDeleteListener;
     private OnFileEditListener fileEditListener;
+    private OnFileClickListener fileClickListener;
 
     public void setGroupDeleteListener(OnGroupDeleteListener l) {
         groupDeleteListener = l;
@@ -69,6 +74,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setFileEditListener(OnFileEditListener l) {
         fileEditListener = l;
+    }
+
+    public void setFileClickListener(OnFileClickListener l) {
+        fileClickListener = l;
     }
 
     // ── Internal display list item ────────────────────────────────────────────
@@ -213,6 +222,11 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         h.btnEditFile.setOnClickListener(v -> {
             if (fileEditListener != null)
                 fileEditListener.onEdit(m);
+        });
+
+        h.itemView.setOnClickListener(v -> {
+            if (fileClickListener != null)
+                fileClickListener.onClick(m);
         });
     }
 

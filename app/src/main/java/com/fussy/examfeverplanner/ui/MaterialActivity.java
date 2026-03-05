@@ -5,6 +5,8 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -117,6 +119,8 @@ public class MaterialActivity extends BaseActivity {
         });
 
         adapter.setFileEditListener(material -> showEditSingleFileDialog(material));
+
+        adapter.setFileClickListener(material -> openMaterial(material));
 
         recyclerView.setAdapter(adapter);
 
@@ -308,6 +312,21 @@ public class MaterialActivity extends BaseActivity {
 
     // ─── Helper methods ───────────────────────────────────────────────────────
 
+    private void openMaterial(StudyMaterial material) {
+        try {
+            Uri uri = Uri.parse(material.getFilePathOrUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            if (!material.isLink()) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                // Help OS figure out how to open
+                intent.setDataAndType(uri, getContentResolver().getType(uri));
+            }
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Could not find an app to open this file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /** Collects all URIs from an Intent result (supports multi-select ClipData) */
     private void collectUrisFromResult(Intent data, List<Uri> out) {
         ClipData clip = data.getClipData();
@@ -358,10 +377,28 @@ public class MaterialActivity extends BaseActivity {
     private String fileNameOf(Uri uri) {
         if (uri == null)
             return "unknown";
-        String path = uri.getLastPathSegment();
-        if (path != null && path.contains("/"))
-            path = path.substring(path.lastIndexOf('/') + 1);
-        return path != null && !path.isEmpty() ? path : uri.toString();
+
+        String result = null;
+        if ("content".equals(uri.getScheme())) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (result == null) {
+            result = uri.getLastPathSegment();
+            if (result != null && result.contains("/")) {
+                result = result.substring(result.lastIndexOf('/') + 1);
+            }
+        }
+
+        return result != null && !result.isEmpty() ? result : uri.toString();
     }
 
     /** Returns an Intent for multi-file selection */
