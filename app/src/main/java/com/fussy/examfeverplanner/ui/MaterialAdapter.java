@@ -180,14 +180,15 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (adPos == RecyclerView.NO_POSITION)
                 return;
             DisplayItem di = displayList.get(adPos);
-            if (di.expanded) {
+            boolean wasExpanded = di.expanded;
+            if (wasExpanded) {
                 collapseGroup(adPos, di);
             } else {
                 expandGroup(adPos, di);
             }
-            // Animate chevron
+            // Animate chevron from its old state to its new state
             ObjectAnimator.ofFloat(h.ivChevron, "rotation",
-                    di.expanded ? 0f : 180f, di.expanded ? 180f : 0f)
+                    wasExpanded ? 180f : 0f, wasExpanded ? 0f : 180f)
                     .setDuration(200).start();
         });
 

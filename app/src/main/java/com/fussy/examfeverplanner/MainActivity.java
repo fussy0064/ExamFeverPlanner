@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             if (tasks != null && !tasks.isEmpty()) {
                 summaryText.setText("You have " + tasks.size() + " pending tasks.");
             } else {
-                summaryText.setText("All caught up! No pending tasks. 🎉");
+                summaryText.setText("All caught up! No pending tasks.");
             }
         });
 

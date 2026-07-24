@@ -103,7 +103,7 @@ public class ExamActivity extends BaseActivity {
             String locationSuffix = location.isEmpty() ? "" : " at " + location;
             NotificationHelper.sendNow(this,
                     ("confirm_" + title + System.currentTimeMillis()).hashCode(),
-                    "📚 Exam Saved: " + title,
+                    "Exam Saved: " + title,
                     "Exam scheduled for " + timeStr + locationSuffix + ". You're all set!",
                     NotificationHelper.CHANNEL_ID_EXAMS);
 
@@ -183,7 +183,7 @@ public class ExamActivity extends BaseActivity {
             String locationSuffix = location.isEmpty() ? "" : " at " + location;
             NotificationHelper.sendNow(this,
                     ("edit_" + title + System.currentTimeMillis()).hashCode(),
-                    "✏️ Exam Updated: " + title,
+                    "Exam Updated: " + title,
                     "Rescheduled to " + timeStr + locationSuffix,
                     NotificationHelper.CHANNEL_ID_EXAMS);
 
@@ -191,7 +191,7 @@ public class ExamActivity extends BaseActivity {
                 scheduleExamReminders(title, location, timeStr, calendar.getTimeInMillis());
             }
 
-            Toast.makeText(this, "Exam updated ✓", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Exam updated", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -216,7 +216,7 @@ public class ExamActivity extends BaseActivity {
         long oneDayBefore = examMs - (24 * 60 * 60 * 1000L);
         NotificationHelper.scheduleAlarm(this, oneDayBefore,
                 baseCode,
-                "📚 Exam Tomorrow: " + title,
+                "Exam Tomorrow: " + title,
                 "Your exam is at " + timeStr + loc + ". Prepare tonight!",
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
@@ -224,19 +224,19 @@ public class ExamActivity extends BaseActivity {
         long oneHourBefore = examMs - (60 * 60 * 1000L);
         NotificationHelper.scheduleAlarm(this, oneHourBefore,
                 baseCode + 1,
-                "⏰ 1 Hour Left: " + title,
+                "1 Hour Left: " + title,
                 "Your exam starts in 1 hour at " + timeStr + loc + ". Good luck!",
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
         // 3 – Exactly at exam time
         NotificationHelper.scheduleAlarm(this, examMs,
                 baseCode + 2,
-                "🚨 Exam Now: " + title,
+                "Exam Now: " + title,
                 "Your exam should be starting now at " + timeStr + loc,
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
         Toast.makeText(this,
-                "✅ Reminders set: 1 day before, 1 hour before & at exam time",
+                "Reminders set: 1 day before, 1 hour before & at exam time",
                 Toast.LENGTH_LONG).show();
     }
 }

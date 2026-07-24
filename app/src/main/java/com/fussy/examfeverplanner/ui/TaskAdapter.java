@@ -69,7 +69,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
 
         if (currentTask.getReminderTime() > 0) {
             SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM d, hh:mm a", Locale.getDefault());
-            holder.tvTaskDate.setText("⏰ " + sdf.format(currentTask.getReminderTime()));
+            holder.tvTaskDate.setText(sdf.format(currentTask.getReminderTime()));
             holder.tvTaskDate.setVisibility(View.VISIBLE);
         } else {
             holder.tvTaskDate.setVisibility(View.GONE);

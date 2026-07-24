@@ -141,7 +141,7 @@ public class TaskActivity extends BaseActivity {
                 if (reminderMs > System.currentTimeMillis()) {
                     String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
                     NotificationHelper.scheduleAlarm(this, reminderMs,
-                            insertedId, "📋 Task Reminder: " + title, msg,
+                            insertedId, "Task Reminder: " + title, msg,
                             NotificationHelper.CHANNEL_ID_TASKS);
                     runOnUiThread(() -> Toast.makeText(this,
                             "Reminder set for " + formatDateTime(reminderMs), Toast.LENGTH_LONG).show());
@@ -180,7 +180,7 @@ public class TaskActivity extends BaseActivity {
         // Use existing reminder time if set, else now
         long existingMs = task.getReminderTime() > 0 ? task.getReminderTime() : System.currentTimeMillis();
         selectedDateTime.setTimeInMillis(existingMs);
-        tvPickedDateTime.setText("⏰ " + formatDateTime(existingMs));
+        tvPickedDateTime.setText(formatDateTime(existingMs));
 
         btnPickDate.setOnClickListener(v -> {
             DatePickerDialog dpd = new DatePickerDialog(this,
@@ -228,9 +228,9 @@ public class TaskActivity extends BaseActivity {
             if (newReminderMs > System.currentTimeMillis()) {
                 String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
                 NotificationHelper.scheduleAlarm(this, newReminderMs, task.getId(),
-                        "📋 Task Reminder: " + title, msg, NotificationHelper.CHANNEL_ID_TASKS);
+                        "Task Reminder: " + title, msg, NotificationHelper.CHANNEL_ID_TASKS);
             }
-            Toast.makeText(this, "Task updated ✓", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -238,7 +238,7 @@ public class TaskActivity extends BaseActivity {
     }
 
     private void refreshDateTimeLabel(TextView label) {
-        label.setText("⏰ " + formatDateTime(selectedDateTime.getTimeInMillis()));
+        label.setText(formatDateTime(selectedDateTime.getTimeInMillis()));
     }
 
     private String formatDateTime(long millis) {

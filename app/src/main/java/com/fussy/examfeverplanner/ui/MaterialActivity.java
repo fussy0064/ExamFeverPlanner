@@ -83,7 +83,7 @@ public class MaterialActivity extends BaseActivity {
                         editingFile.setFilePathOrUrl(uri.toString());
                         editingFile.setLink(false);
                         if (tvSingleEditFile != null)
-                            tvSingleEditFile.setText("📄 " + fileNameOf(uri));
+                            tvSingleEditFile.setText(fileNameOf(uri));
                     }
                 }
             });
@@ -157,7 +157,7 @@ public class MaterialActivity extends BaseActivity {
         btnBrowse.setOnClickListener(v -> addFilePicker.launch(multiFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("📂  Add Study Materials")
+                .setTitle("Add Study Materials")
                 .setView(view)
                 .setPositiveButton("Add", (d, w) -> {
                     String title = etTitle.getText().toString().trim();
@@ -215,7 +215,7 @@ public class MaterialActivity extends BaseActivity {
         btnBrowse.setOnClickListener(v -> editGroupFilePicker.launch(multiFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("✏️  Edit Group: " + groupName)
+                .setTitle("Edit Group: " + groupName)
                 .setView(view)
                 .setPositiveButton("Save", (d, w) -> {
                     String newTitle = etTitle.getText().toString().trim();
@@ -247,7 +247,7 @@ public class MaterialActivity extends BaseActivity {
 
                     int added = pendingEditUris.size() + (url.isEmpty() ? 0 : 1);
                     Toast.makeText(this,
-                            "Group updated" + (added > 0 ? ", " + added + " item(s) added" : "") + " ✓",
+                            "Group updated" + (added > 0 ? ", " + added + " item(s) added" : ""),
                             Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Cancel", null)
@@ -269,13 +269,13 @@ public class MaterialActivity extends BaseActivity {
         if (material.isLink())
             etUrl.setText(material.getFilePathOrUrl());
         tvSingleEditFile.setText(material.isLink()
-                ? "🔗 Currently a link"
-                : "📄 " + fileNameOf(Uri.parse(material.getFilePathOrUrl())));
+                ? "Currently a link"
+                : fileNameOf(Uri.parse(material.getFilePathOrUrl())));
 
         btnBrowse.setOnClickListener(v -> singleFilePicker.launch(singleFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("✏️  Edit File")
+                .setTitle("Edit File")
                 .setView(view)
                 .setPositiveButton("Save", (d, w) -> {
                     String title = etTitle.getText().toString().trim();
@@ -290,7 +290,7 @@ public class MaterialActivity extends BaseActivity {
                         material.setLink(true);
                     }
                     materialViewModel.update(material);
-                    Toast.makeText(this, "File updated ✓", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "File updated", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -349,9 +349,9 @@ public class MaterialActivity extends BaseActivity {
         if (pendingAddUris.isEmpty()) {
             tvAddSelectedFiles.setText("No files selected");
         } else if (pendingAddUris.size() == 1) {
-            tvAddSelectedFiles.setText("📄 " + fileNameOf(pendingAddUris.get(0)));
+            tvAddSelectedFiles.setText(fileNameOf(pendingAddUris.get(0)));
         } else {
-            tvAddSelectedFiles.setText("📄 " + pendingAddUris.size() + " files selected");
+            tvAddSelectedFiles.setText(pendingAddUris.size() + " files selected");
         }
     }
 

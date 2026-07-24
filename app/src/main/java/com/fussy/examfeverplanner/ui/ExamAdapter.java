@@ -61,13 +61,13 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamHolder> {
             String dateStr = sdf.format(new Date(dateMillis));
             String timeStr = currentExam.getExamTime();
             if (timeStr != null && !timeStr.isEmpty()) {
-                dateStr += "  ⏰ " + timeStr;
+                dateStr += "  " + timeStr;
             }
             holder.tvExamDate.setText(dateStr);
 
             String location = currentExam.getLocation();
             if (location != null && !location.isEmpty()) {
-                holder.tvExamLocation.setText("📍 " + location);
+                holder.tvExamLocation.setText(location);
                 holder.tvExamLocation.setVisibility(View.VISIBLE);
             } else {
                 holder.tvExamLocation.setVisibility(View.GONE);
@@ -136,7 +136,8 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamHolder> {
                 Exam a = exams.get(o), b = newExams.get(n);
                 return a.getTitle().equals(b.getTitle())
                         && a.getDate() == b.getDate()
-                        && a.getExamTime() != null && a.getExamTime().equals(b.getExamTime())
+                        && (a.getExamTime() == null ? b.getExamTime() == null
+                                : a.getExamTime().equals(b.getExamTime()))
                         && (a.getLocation() == null ? b.getLocation() == null
                                 : a.getLocation().equals(b.getLocation()));
             }

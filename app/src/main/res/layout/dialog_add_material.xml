@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="📂 Browse Phone Storage"
+        android:text="Browse Phone Storage"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <!-- Shows selected file name -->
