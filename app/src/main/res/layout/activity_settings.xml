@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="Settings"
+            app:title="@string/settings_title"
             app:titleTextColor="@color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -33,7 +33,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Appearance"
+                android:text="@string/settings_appearance"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"
@@ -66,7 +66,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Theme"
+                            android:text="@string/settings_theme"
                             android:textSize="16sp" />
 
                         <TextView
@@ -81,7 +81,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginStart="8dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            android:src="@drawable/ic_chevron_down_24"
                             app:tint="?attr/colorControlNormal" />
                     </LinearLayout>
 
@@ -106,7 +106,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Language"
+                            android:text="@string/settings_language"
                             android:textSize="16sp" />
 
                         <TextView
@@ -121,7 +121,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginStart="8dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            android:src="@drawable/ic_chevron_down_24"
                             app:tint="?attr/colorControlNormal" />
                     </LinearLayout>
 
@@ -132,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/settings_notifications"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"
@@ -165,7 +165,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Notification Sound"
+                            android:text="@string/settings_notification_sound"
                             android:textSize="16sp" />
 
                         <TextView
@@ -180,7 +180,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginStart="8dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            android:src="@drawable/ic_chevron_down_24"
                             app:tint="?attr/colorControlNormal" />
                     </LinearLayout>
 
@@ -203,7 +203,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Enable Reminders"
+                            android:text="@string/settings_enable_reminders"
                             android:textSize="16sp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -220,7 +220,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About"
+                android:text="@string/settings_about"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"
@@ -243,21 +243,28 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Exam Fever Planner"
+                        android:text="@string/app_name"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Version 1.0"
+                        android:text="@string/version_label"
                         android:textSize="13sp"
                         android:layout_marginTop="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your all-in-one exam planning companion."
+                        android:text="@string/build_by"
+                        android:textSize="13sp"
+                        android:layout_marginTop="2dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_tagline"
                         android:textSize="13sp"
                         android:layout_marginTop="4dp" />
                 </LinearLayout>

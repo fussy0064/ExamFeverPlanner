@@ -75,21 +75,21 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamHolder> {
 
             long diffInMillis = dateMillis - System.currentTimeMillis();
             if (diffInMillis < 0) {
-                holder.tvDaysLeft.setText("Done!");
+                holder.tvDaysLeft.setText(R.string.exam_done_label);
             } else {
                 long days = diffInMillis / (1000 * 60 * 60 * 24);
                 holder.tvDaysLeft.setText(days + "\nDays\nLeft");
             }
         } else {
-            holder.tvExamDate.setText("Date: Not set");
+            holder.tvExamDate.setText(R.string.exam_date_not_set);
             holder.tvExamLocation.setVisibility(View.GONE);
             holder.tvDaysLeft.setText("?");
         }
 
         holder.btnDelete.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
-                .setTitle("Delete Exam")
-                .setMessage("Delete \"" + currentExam.getTitle() + "\"?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_exam_title)
+                .setMessage(v.getContext().getString(R.string.delete_exam_message, currentExam.getTitle()))
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     if (deleteListener != null) {
                         // Instant remove from local list
                         int pos = holder.getAdapterPosition();
@@ -100,7 +100,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ExamHolder> {
                         deleteListener.onDelete(currentExam);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show());
 
         holder.btnEdit.setOnClickListener(v -> {

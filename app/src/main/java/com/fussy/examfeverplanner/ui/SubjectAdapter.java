@@ -62,7 +62,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     public void onBindViewHolder(@NonNull SubjectHolder holder, int position) {
         Subject currentSubject = subjects.get(position);
         holder.tvSubjectName.setText(currentSubject.getName());
-        holder.tvTopicCount.setText("Topics available");
+        holder.tvTopicCount.setText(R.string.topics_available);
 
         try {
             if (currentSubject.getColorHex() != null && !currentSubject.getColorHex().isEmpty()) {
@@ -80,9 +80,9 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         });
 
         holder.btnDelete.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
-                .setTitle("Delete Subject")
-                .setMessage("Delete \"" + currentSubject.getName() + "\" and all its topics?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_subject_title)
+                .setMessage(v.getContext().getString(R.string.delete_subject_message, currentSubject.getName()))
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     int pos = holder.getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         subjects.remove(pos);
@@ -91,7 +91,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     if (deleteListener != null)
                         deleteListener.onDelete(currentSubject);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show());
 
         holder.btnEdit.setOnClickListener(v -> {

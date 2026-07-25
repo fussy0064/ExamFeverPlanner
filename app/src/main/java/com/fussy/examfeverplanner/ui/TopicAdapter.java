@@ -76,9 +76,9 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         });
 
         holder.btnDelete.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
-                .setTitle("Delete Topic")
-                .setMessage("Delete \"" + currentTopic.getName() + "\"?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_topic_title)
+                .setMessage(v.getContext().getString(R.string.delete_topic_message, currentTopic.getName()))
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     int pos = holder.getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         topics.remove(pos);
@@ -87,7 +87,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
                     if (deleteListener != null)
                         deleteListener.onDelete(currentTopic);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show());
 
         holder.btnEdit.setOnClickListener(v -> {

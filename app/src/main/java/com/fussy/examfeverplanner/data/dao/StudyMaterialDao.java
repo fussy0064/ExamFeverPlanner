@@ -29,6 +29,10 @@ public interface StudyMaterialDao {
     @Query("SELECT * FROM materials WHERE subjectId = :subjectId ORDER BY groupName ASC, id ASC")
     LiveData<List<StudyMaterial>> getMaterialsBySubjectLive(int subjectId);
 
+    /** All materials across every subject, ordered by subject then topic then group. */
+    @Query("SELECT * FROM materials ORDER BY subjectId ASC, topicId ASC, groupName ASC, id ASC")
+    LiveData<List<StudyMaterial>> getAllMaterialsLive();
+
     /** Delete all materials belonging to a group */
     @Query("DELETE FROM materials WHERE groupName = :groupName AND subjectId = :subjectId")
     void deleteByGroup(String groupName, int subjectId);

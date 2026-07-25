@@ -41,4 +41,8 @@ public class StudyMaterialRepository {
     public LiveData<List<StudyMaterial>> getMaterialsBySubject(int subjectId) {
         return materialDao.getMaterialsBySubjectLive(subjectId);
     }
+
+    public LiveData<List<StudyMaterial>> getAllMaterials() {
+        return materialDao.getAllMaterialsLive();
+    }
 }

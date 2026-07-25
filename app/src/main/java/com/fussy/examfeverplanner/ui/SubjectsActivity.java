@@ -73,7 +73,7 @@ public class SubjectsActivity extends BaseActivity {
 
         TextInputEditText editTextSubjectName = dialogView.findViewById(R.id.edit_text_subject_name);
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_add, (dialog, which) -> {
             String subjectName = editTextSubjectName.getText().toString().trim();
             if (!subjectName.isEmpty()) {
                 String[] colors = { "#EF5350", "#EC407A", "#AB47BC", "#7E57C2",
@@ -86,7 +86,7 @@ public class SubjectsActivity extends BaseActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
@@ -99,13 +99,13 @@ public class SubjectsActivity extends BaseActivity {
         // Change heading label if it exists
         TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_subject_title);
         if (tvHeading != null)
-            tvHeading.setText("Edit Subject");
+            tvHeading.setText(R.string.edit_subject);
 
         TextInputEditText editTextSubjectName = dialogView.findViewById(R.id.edit_text_subject_name);
         editTextSubjectName.setText(subject.getName());
         editTextSubjectName.setSelection(subject.getName().length());
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_save, (dialog, which) -> {
             String newName = editTextSubjectName.getText().toString().trim();
             if (!newName.isEmpty()) {
                 subject.setName(newName);
@@ -113,7 +113,7 @@ public class SubjectsActivity extends BaseActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 }

@@ -1,3 +1,158 @@
 <resources>
     <string name="app_name">Exam Fever Planner</string>
+
+    <!-- Common actions -->
+    <string name="action_add">Add</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_delete_all">Delete All</string>
+
+    <!-- Dashboard -->
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="dashboard_subjects_topics">Subjects &amp;\nTopics</string>
+    <string name="dashboard_todo_lists">To-Do\nLists</string>
+    <string name="dashboard_exam_countdown">Exam\nCountdown</string>
+    <string name="dashboard_study_materials">Study\nMaterials</string>
+    <string name="tasks_pending_summary">You have %1$d pending tasks for today.</string>
+    <string name="tasks_all_caught_up">All caught up! No pending tasks.</string>
+
+    <!-- Subjects -->
+    <string name="subjects_empty">No subjects added yet. Tap + to add one.</string>
+    <string name="add_new_subject">Add New Subject</string>
+    <string name="edit_subject">Edit Subject</string>
+    <string name="subject_name_hint">Subject Name</string>
+    <string name="delete_subject_title">Delete Subject</string>
+    <string name="delete_subject_message">Delete \"%1$s\" and all its topics?</string>
+    <string name="topics_available">Topics available</string>
+
+    <!-- Topics -->
+    <string name="topics_empty">No topics added yet. Tap + to add one.</string>
+    <string name="topics_title_fallback">Topics</string>
+    <string name="topics_of_subject">%1$s — Topics</string>
+    <string name="add_new_topic">Add New Topic</string>
+    <string name="edit_topic">Edit Topic</string>
+    <string name="topic_name_hint">Topic Name</string>
+    <string name="delete_topic_title">Delete Topic</string>
+    <string name="delete_topic_message">Delete \"%1$s\"?</string>
+
+    <!-- Tasks -->
+    <string name="tasks_empty">No tasks pending!</string>
+    <string name="add_new_task">Add New Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="task_title_hint">Task Title</string>
+    <string name="task_desc_hint">Description (optional)</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="no_reminder_set">No reminder set</string>
+    <string name="action_add_task">Add Task</string>
+    <string name="task_title_required">Please enter a task title</string>
+    <string name="task_deleted">Task deleted</string>
+    <string name="task_updated">Task updated</string>
+    <string name="task_reminder_msg">Time to tackle: %1$s</string>
+    <string name="task_reminder_title">Task Reminder: %1$s</string>
+    <string name="reminder_set_for">Reminder set for %1$s</string>
+    <string name="delete_task_title">Delete Task</string>
+    <string name="delete_task_message">Delete \"%1$s\"?</string>
+
+    <!-- Exams -->
+    <string name="exams_empty">No exams added yet. Add one to track!</string>
+    <string name="add_exam_timetable">Add Exam / Timetable</string>
+    <string name="exam_subject_name_hint">Exam / Subject Name</string>
+    <string name="venue_hint">Venue / Room (optional)</string>
+    <string name="select_date">Select Date:</string>
+    <string name="select_time">Select Time:</string>
+    <string name="set_notif_reminder">Set notification reminder (1 day before)</string>
+    <string name="action_add_exam">Add Exam</string>
+    <string name="exam_name_required">Please enter an exam name</string>
+    <string name="exam_saved_title">Exam Saved: %1$s</string>
+    <string name="exam_saved_msg">Exam scheduled for %1$s%2$s. You\'re all set!</string>
+    <string name="edit_exam">Edit Exam</string>
+    <string name="exam_updated_title">Exam Updated: %1$s</string>
+    <string name="exam_updated_msg">Rescheduled to %1$s%2$s</string>
+    <string name="exam_updated_toast">Exam updated</string>
+    <string name="exam_tomorrow_title">Exam Tomorrow: %1$s</string>
+    <string name="exam_tomorrow_msg">Your exam is at %1$s%2$s. Prepare tonight!</string>
+    <string name="exam_1hr_title">1 Hour Left: %1$s</string>
+    <string name="exam_1hr_msg">Your exam starts in 1 hour at %1$s%2$s. Good luck!</string>
+    <string name="exam_now_title">Exam Now: %1$s</string>
+    <string name="exam_now_msg">Your exam should be starting now at %1$s%2$s</string>
+    <string name="reminders_set_msg">Reminders set: 1 day before, 1 hour before &amp; at exam time</string>
+    <string name="delete_exam_title">Delete Exam</string>
+    <string name="delete_exam_message">Delete \"%1$s\"?</string>
+    <string name="exam_done_label">Done!</string>
+    <string name="exam_date_not_set">Date: Not set</string>
+    <string name="location_suffix_at"> at %1$s</string>
+    <string name="location_suffix_in"> in %1$s</string>
+
+    <!-- Study materials -->
+    <string name="materials_empty">No materials added yet. Tap + to add.</string>
+    <string name="add_study_materials">Add Study Materials</string>
+    <string name="material_title_hint">Title</string>
+    <string name="material_url_hint">URL / Web Link (optional)</string>
+    <string name="browse_phone_storage">Browse Phone Storage</string>
+    <string name="no_file_selected">No file selected</string>
+    <string name="or_pick_from_phone">— OR pick a file from phone —</string>
+    <string name="no_files_selected_browse">No files selected — Browse to pick one or more</string>
+    <string name="no_files_selected">No files selected</string>
+    <string name="files_selected_count">%1$d files selected</string>
+    <string name="group_title_required">Please enter a group title</string>
+    <string name="add_file_or_url_required">Add at least one file or URL</string>
+    <string name="items_added_under">%1$d item(s) added under \'%2$s\'</string>
+    <string name="edit_group_title">Edit Group: %1$s</string>
+    <string name="group_updated">Group updated</string>
+    <string name="group_updated_with_added">Group updated, %1$d item(s) added</string>
+    <string name="existing_files_browse_more">%1$d existing file(s) — Browse to add more</string>
+    <string name="existing_files_label">%1$d existing file(s)</string>
+    <string name="existing_plus_new_files">%1$d existing + %2$d new file(s) to add</string>
+    <string name="edit_file_title">Edit File</string>
+    <string name="title_cannot_be_empty">Title cannot be empty</string>
+    <string name="file_updated">File updated</string>
+    <string name="delete_group_title">Delete Group</string>
+    <string name="delete_group_message">Delete all files under \'%1$s\'?</string>
+    <string name="group_deleted">Group deleted</string>
+    <string name="file_removed">File removed</string>
+    <string name="currently_a_link">Currently a link</string>
+    <string name="could_not_open_file">Could not find an app to open this file</string>
+    <string name="select_subject">Select Subject</string>
+    <string name="select_topic">Select Topic (optional)</string>
+    <string name="general_no_topic">General (no topic)</string>
+    <string name="subject_required">Please choose a subject</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notification_sound">Notification Sound</string>
+    <string name="settings_enable_reminders">Enable Reminders</string>
+    <string name="settings_about">About</string>
+    <string name="app_tagline">Your all-in-one exam planning companion.</string>
+    <string name="choose_theme">Choose Theme</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="theme_system_default">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="sound_default">Default</string>
+    <string name="sound_custom">Custom</string>
+    <string name="select_notification_sound">Select Notification Sound</string>
+    <string name="version_label">Version 1.01</string>
+    <string name="build_by">Build by Fussy0064</string>
+
+    <string name="channel_task_reminders">Task Reminders</string>
+    <string name="channel_task_reminders_desc">Reminders for your to-do tasks</string>
+    <string name="channel_exam_alerts">Exam Alerts</string>
+    <string name="channel_exam_alerts_desc">Countdown alerts for upcoming exams</string>
+
+    <string-array name="theme_options">
+        <item>System Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <plurals name="file_count">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
 </resources>

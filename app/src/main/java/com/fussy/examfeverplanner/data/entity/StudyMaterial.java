@@ -14,6 +14,7 @@ public class StudyMaterial {
 
     private String filePathOrUrl;
     private int subjectId;
+    private int topicId = -1; // -1 = no specific topic (General)
     private boolean isLink;
 
     /**
@@ -63,6 +64,14 @@ public class StudyMaterial {
 
     public void setSubjectId(int v) {
         this.subjectId = v;
+    }
+
+    public int getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(int topicId) {
+        this.topicId = topicId;
     }
 
     public boolean isLink() {

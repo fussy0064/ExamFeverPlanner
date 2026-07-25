@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Study Material"
+        android:text="@string/add_study_materials"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
@@ -17,7 +17,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Title">
+        android:hint="@string/material_title_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_material_name"
             android:layout_width="match_parent"
@@ -25,12 +25,40 @@
             android:inputType="textCapSentences" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Subject -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/select_subject"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinner_material_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Topic -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/select_topic"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinner_material_topic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <!-- Option A: URL -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="URL / Web Link (optional)">
+        android:hint="@string/material_url_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_material_url"
             android:layout_width="match_parent"
@@ -43,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="— OR pick a file from phone —"
+        android:text="@string/or_pick_from_phone"
         android:gravity="center"
         android:textSize="12sp" />
 
@@ -53,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Browse Phone Storage"
+        android:text="@string/browse_phone_storage"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <!-- Shows selected file name -->
@@ -62,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="No file selected"
+        android:text="@string/no_file_selected"
         android:textSize="12sp"
         android:gravity="center"
         android:textStyle="italic" />

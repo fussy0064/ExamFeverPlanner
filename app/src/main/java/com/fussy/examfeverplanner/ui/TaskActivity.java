@@ -70,7 +70,7 @@ public class TaskActivity extends BaseActivity {
                 Task task = adapter.getTaskAt(vh.getAdapterPosition());
                 NotificationHelper.cancelAlarm(TaskActivity.this, task.getId());
                 taskViewModel.delete(task);
-                Toast.makeText(TaskActivity.this, "Task deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TaskActivity.this, R.string.task_deleted, Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
 
@@ -126,11 +126,11 @@ public class TaskActivity extends BaseActivity {
                 selectedDateTime.get(Calendar.HOUR_OF_DAY),
                 selectedDateTime.get(Calendar.MINUTE), false).show());
 
-        builder.setPositiveButton("Add Task", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_add_task, (dialog, which) -> {
             String title = editTextTaskName.getText().toString().trim();
             String desc = editTextTaskDesc.getText().toString().trim();
             if (title.isEmpty()) {
-                Toast.makeText(this, "Please enter a task title", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.task_title_required, Toast.LENGTH_SHORT).show();
                 return;
             }
             long reminderMs = selectedDateTime.getTimeInMillis();
@@ -139,17 +139,17 @@ public class TaskActivity extends BaseActivity {
 
             taskViewModel.insertAndThen(newTask, insertedId -> {
                 if (reminderMs > System.currentTimeMillis()) {
-                    String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
+                    String msg = desc.isEmpty() ? getString(R.string.task_reminder_msg, title) : desc;
                     NotificationHelper.scheduleAlarm(this, reminderMs,
-                            insertedId, "Task Reminder: " + title, msg,
+                            insertedId, getString(R.string.task_reminder_title, title), msg,
                             NotificationHelper.CHANNEL_ID_TASKS);
                     runOnUiThread(() -> Toast.makeText(this,
-                            "Reminder set for " + formatDateTime(reminderMs), Toast.LENGTH_LONG).show());
+                            getString(R.string.reminder_set_for, formatDateTime(reminderMs)), Toast.LENGTH_LONG).show());
                 }
             });
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
@@ -165,7 +165,7 @@ public class TaskActivity extends BaseActivity {
         // Update dialog heading if present
         TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_task_title);
         if (tvHeading != null)
-            tvHeading.setText("Edit Task");
+            tvHeading.setText(R.string.edit_task);
 
         TextInputEditText editTextTaskName = dialogView.findViewById(R.id.edit_text_task_name);
         TextInputEditText editTextTaskDesc = dialogView.findViewById(R.id.edit_text_task_desc);
@@ -206,11 +206,11 @@ public class TaskActivity extends BaseActivity {
                 selectedDateTime.get(Calendar.HOUR_OF_DAY),
                 selectedDateTime.get(Calendar.MINUTE), false).show());
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_save, (dialog, which) -> {
             String title = editTextTaskName.getText().toString().trim();
             String desc = editTextTaskDesc.getText().toString().trim();
             if (title.isEmpty()) {
-                Toast.makeText(this, "Please enter a task title", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.task_title_required, Toast.LENGTH_SHORT).show();
                 return;
             }
             long newReminderMs = selectedDateTime.getTimeInMillis();
@@ -226,14 +226,14 @@ public class TaskActivity extends BaseActivity {
 
             // Re-schedule if in the future
             if (newReminderMs > System.currentTimeMillis()) {
-                String msg = desc.isEmpty() ? "Time to tackle: " + title : desc;
+                String msg = desc.isEmpty() ? getString(R.string.task_reminder_msg, title) : desc;
                 NotificationHelper.scheduleAlarm(this, newReminderMs, task.getId(),
-                        "Task Reminder: " + title, msg, NotificationHelper.CHANNEL_ID_TASKS);
+                        getString(R.string.task_reminder_title, title), msg, NotificationHelper.CHANNEL_ID_TASKS);
             }
-            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.task_updated, Toast.LENGTH_SHORT).show();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 

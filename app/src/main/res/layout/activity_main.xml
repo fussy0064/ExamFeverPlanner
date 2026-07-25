@@ -49,7 +49,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Welcome Back!"
+                        android:text="@string/welcome_back"
                         android:textSize="22sp"
                         android:textStyle="bold" />
                         
@@ -78,7 +78,7 @@
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
-                    android:text="Subjects &amp;\nTopics"
+                    android:text="@string/dashboard_subjects_topics"
                     app:iconGravity="top"
                     app:iconSize="32dp" />
 
@@ -88,7 +88,7 @@
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
-                    android:text="To-Do\nLists"
+                    android:text="@string/dashboard_todo_lists"
                     app:iconGravity="top"
                     app:iconSize="32dp" />
                     
@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
-                    android:text="Exam\nCountdown"
+                    android:text="@string/dashboard_exam_countdown"
                     app:iconGravity="top"
                     app:iconSize="32dp" />
 
@@ -108,7 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="120dp"
                     android:layout_columnWeight="1"
-                    android:text="Study\nMaterials"
+                    android:text="@string/dashboard_study_materials"
                     app:iconGravity="top"
                     app:iconSize="32dp" />
                     

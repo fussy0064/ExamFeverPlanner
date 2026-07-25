@@ -30,16 +30,16 @@ public class NotificationHelper {
             NotificationManager nm = context.getSystemService(NotificationManager.class);
 
             NotificationChannel taskChannel = new NotificationChannel(
-                    CHANNEL_ID_TASKS, "Task Reminders",
+                    CHANNEL_ID_TASKS, context.getString(R.string.channel_task_reminders),
                     NotificationManager.IMPORTANCE_HIGH);
-            taskChannel.setDescription("Reminders for your to-do tasks");
+            taskChannel.setDescription(context.getString(R.string.channel_task_reminders_desc));
             taskChannel.enableVibration(true);
             nm.createNotificationChannel(taskChannel);
 
             NotificationChannel examChannel = new NotificationChannel(
-                    CHANNEL_ID_EXAMS, "Exam Alerts",
+                    CHANNEL_ID_EXAMS, context.getString(R.string.channel_exam_alerts),
                     NotificationManager.IMPORTANCE_HIGH);
-            examChannel.setDescription("Countdown alerts for upcoming exams");
+            examChannel.setDescription(context.getString(R.string.channel_exam_alerts_desc));
             examChannel.enableVibration(true);
             nm.createNotificationChannel(examChannel);
         }

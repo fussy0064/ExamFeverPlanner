@@ -13,7 +13,7 @@
             android:id="@+id/tv_dialog_task_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New Task"
+            android:text="@string/add_new_task"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
@@ -21,7 +21,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Task Title">
+            android:hint="@string/task_title_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_task_name"
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Description (optional)">
+            android:hint="@string/task_desc_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_task_desc"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Pick Date"
+                android:text="@string/pick_date"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackground"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Pick Time"
+                android:text="@string/pick_time"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackground"
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="No reminder set"
+            android:text="@string/no_reminder_set"
             android:textSize="13sp"
             android:gravity="center"
             android:textStyle="italic" />

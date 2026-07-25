@@ -168,7 +168,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void bindGroup(GroupViewHolder h, DisplayItem item, int pos) {
         h.tvGroupName.setText(item.groupName);
         int count = item.groupFiles.size();
-        h.tvFileCount.setText(count + (count == 1 ? " file" : " files"));
+        h.tvFileCount.setText(h.itemView.getResources()
+                .getQuantityString(R.plurals.file_count, count, count));
 
         // Animate chevron
         float rotation = item.expanded ? 180f : 0f;
@@ -212,8 +213,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         // Different icon for links vs files
         h.ivFileIcon.setImageResource(m.isLink()
-                ? android.R.drawable.ic_menu_share
-                : android.R.drawable.ic_menu_save);
+                ? R.drawable.ic_link_24
+                : R.drawable.ic_file_24);
 
         h.btnDeleteFile.setOnClickListener(v -> {
             if (fileDeleteListener != null)

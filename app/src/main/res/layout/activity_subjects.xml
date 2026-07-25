@@ -18,7 +18,8 @@
             android:background="?attr/colorPrimary"
             app:title="Subjects &amp; Topics"
             app:titleTextColor="@color/white" 
-            app:navigationIcon="@android:drawable/ic_menu_revert" />
+            app:navigationIcon="@drawable/ic_back_24"
+            app:navigationIconTint="@color/white" />
             
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -27,7 +28,7 @@
         android:id="@+id/tv_empty_subjects"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No subjects added yet. Tap + to add one."
+        android:text="@string/subjects_empty"
         android:textSize="16sp"
         android:layout_gravity="center"
         android:visibility="gone" />

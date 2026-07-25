@@ -1,0 +1,158 @@
+<resources>
+    <string name="app_name">Exam Fever Planner</string>
+
+    <!-- Common actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_save">Salvar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_delete_all">Excluir tudo</string>
+
+    <!-- Dashboard -->
+    <string name="welcome_back">Bem-vindo de volta!</string>
+    <string name="dashboard_subjects_topics">Matérias &amp;\nTópicos</string>
+    <string name="dashboard_todo_lists">Listas\nde tarefas</string>
+    <string name="dashboard_exam_countdown">Contagem regressiva\nde provas</string>
+    <string name="dashboard_study_materials">Materiais\nde estudo</string>
+    <string name="tasks_pending_summary">Você tem %1$d tarefa(s) pendente(s) hoje.</string>
+    <string name="tasks_all_caught_up">Tudo em dia! Nenhuma tarefa pendente.</string>
+
+    <!-- Subjects -->
+    <string name="subjects_empty">Nenhuma matéria adicionada. Toque em + para adicionar uma.</string>
+    <string name="add_new_subject">Adicionar nova matéria</string>
+    <string name="edit_subject">Editar matéria</string>
+    <string name="subject_name_hint">Nome da matéria</string>
+    <string name="delete_subject_title">Excluir matéria</string>
+    <string name="delete_subject_message">Excluir \"%1$s\" e todos os seus tópicos?</string>
+    <string name="topics_available">Tópicos disponíveis</string>
+
+    <!-- Topics -->
+    <string name="topics_empty">Nenhum tópico adicionado. Toque em + para adicionar um.</string>
+    <string name="topics_title_fallback">Tópicos</string>
+    <string name="topics_of_subject">%1$s — Tópicos</string>
+    <string name="add_new_topic">Adicionar novo tópico</string>
+    <string name="edit_topic">Editar tópico</string>
+    <string name="topic_name_hint">Nome do tópico</string>
+    <string name="delete_topic_title">Excluir tópico</string>
+    <string name="delete_topic_message">Excluir \"%1$s\"?</string>
+
+    <!-- Tasks -->
+    <string name="tasks_empty">Nenhuma tarefa pendente!</string>
+    <string name="add_new_task">Adicionar nova tarefa</string>
+    <string name="edit_task">Editar tarefa</string>
+    <string name="task_title_hint">Título da tarefa</string>
+    <string name="task_desc_hint">Descrição (opcional)</string>
+    <string name="pick_date">Escolher data</string>
+    <string name="pick_time">Escolher hora</string>
+    <string name="no_reminder_set">Nenhum lembrete definido</string>
+    <string name="action_add_task">Adicionar tarefa</string>
+    <string name="task_title_required">Digite um título para a tarefa</string>
+    <string name="task_deleted">Tarefa excluída</string>
+    <string name="task_updated">Tarefa atualizada</string>
+    <string name="task_reminder_msg">Hora de: %1$s</string>
+    <string name="task_reminder_title">Lembrete de tarefa: %1$s</string>
+    <string name="reminder_set_for">Lembrete definido para %1$s</string>
+    <string name="delete_task_title">Excluir tarefa</string>
+    <string name="delete_task_message">Excluir \"%1$s\"?</string>
+
+    <!-- Exams -->
+    <string name="exams_empty">Nenhuma prova adicionada. Adicione uma para acompanhar!</string>
+    <string name="add_exam_timetable">Adicionar prova / horário</string>
+    <string name="exam_subject_name_hint">Nome da prova / matéria</string>
+    <string name="venue_hint">Sala / local (opcional)</string>
+    <string name="select_date">Selecionar data:</string>
+    <string name="select_time">Selecionar hora:</string>
+    <string name="set_notif_reminder">Definir lembrete de notificação (1 dia antes)</string>
+    <string name="action_add_exam">Adicionar prova</string>
+    <string name="exam_name_required">Digite um nome para a prova</string>
+    <string name="exam_saved_title">Prova salva: %1$s</string>
+    <string name="exam_saved_msg">Prova agendada para %1$s%2$s. Está tudo pronto!</string>
+    <string name="edit_exam">Editar prova</string>
+    <string name="exam_updated_title">Prova atualizada: %1$s</string>
+    <string name="exam_updated_msg">Reagendada para %1$s%2$s</string>
+    <string name="exam_updated_toast">Prova atualizada</string>
+    <string name="exam_tomorrow_title">Prova amanhã: %1$s</string>
+    <string name="exam_tomorrow_msg">Sua prova é às %1$s%2$s. Prepare-se hoje à noite!</string>
+    <string name="exam_1hr_title">Falta 1 hora: %1$s</string>
+    <string name="exam_1hr_msg">Sua prova começa em 1 hora, às %1$s%2$s. Boa sorte!</string>
+    <string name="exam_now_title">Prova agora: %1$s</string>
+    <string name="exam_now_msg">Sua prova deve estar começando agora, às %1$s%2$s</string>
+    <string name="reminders_set_msg">Lembretes definidos: 1 dia antes, 1 hora antes &amp; na hora da prova</string>
+    <string name="delete_exam_title">Excluir prova</string>
+    <string name="delete_exam_message">Excluir \"%1$s\"?</string>
+    <string name="exam_done_label">Concluído!</string>
+    <string name="exam_date_not_set">Data: não definida</string>
+    <string name="location_suffix_at"> às %1$s</string>
+    <string name="location_suffix_in"> em %1$s</string>
+
+    <!-- Study materials -->
+    <string name="materials_empty">Nenhum material adicionado. Toque em + para adicionar.</string>
+    <string name="add_study_materials">Adicionar materiais de estudo</string>
+    <string name="material_title_hint">Título</string>
+    <string name="material_url_hint">URL / link da web (opcional)</string>
+    <string name="browse_phone_storage">Procurar no armazenamento do telefone</string>
+    <string name="no_file_selected">Nenhum arquivo selecionado</string>
+    <string name="or_pick_from_phone">— OU escolha um arquivo do telefone —</string>
+    <string name="no_files_selected_browse">Nenhum arquivo selecionado — Procure para escolher um ou mais</string>
+    <string name="no_files_selected">Nenhum arquivo selecionado</string>
+    <string name="files_selected_count">%1$d arquivo(s) selecionado(s)</string>
+    <string name="group_title_required">Digite um título para o grupo</string>
+    <string name="add_file_or_url_required">Adicione pelo menos um arquivo ou URL</string>
+    <string name="items_added_under">%1$d item(ns) adicionado(s) em \'%2$s\'</string>
+    <string name="edit_group_title">Editar grupo: %1$s</string>
+    <string name="group_updated">Grupo atualizado</string>
+    <string name="group_updated_with_added">Grupo atualizado, %1$d item(ns) adicionado(s)</string>
+    <string name="existing_files_browse_more">%1$d arquivo(s) existente(s) — Procure para adicionar mais</string>
+    <string name="existing_files_label">%1$d arquivo(s) existente(s)</string>
+    <string name="existing_plus_new_files">%1$d existente(s) + %2$d novo(s) arquivo(s) a adicionar</string>
+    <string name="edit_file_title">Editar arquivo</string>
+    <string name="title_cannot_be_empty">O título não pode estar vazio</string>
+    <string name="file_updated">Arquivo atualizado</string>
+    <string name="delete_group_title">Excluir grupo</string>
+    <string name="delete_group_message">Excluir todos os arquivos em \'%1$s\'?</string>
+    <string name="group_deleted">Grupo excluído</string>
+    <string name="file_removed">Arquivo removido</string>
+    <string name="currently_a_link">Atualmente um link</string>
+    <string name="could_not_open_file">Não foi possível encontrar um app para abrir este arquivo</string>
+    <string name="select_subject">Selecionar matéria</string>
+    <string name="select_topic">Selecionar tópico (opcional)</string>
+    <string name="general_no_topic">Geral (sem tópico)</string>
+    <string name="subject_required">Escolha uma matéria</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_appearance">Aparência</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_notifications">Notificações</string>
+    <string name="settings_notification_sound">Som de notificação</string>
+    <string name="settings_enable_reminders">Ativar lembretes</string>
+    <string name="settings_about">Sobre</string>
+    <string name="app_tagline">Seu companheiro completo para o planejamento de provas.</string>
+    <string name="choose_theme">Escolher tema</string>
+    <string name="choose_language">Escolher idioma</string>
+    <string name="theme_system_default">Padrão do sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="sound_default">Padrão</string>
+    <string name="sound_custom">Personalizado</string>
+    <string name="select_notification_sound">Selecionar som de notificação</string>
+    <string name="version_label">Versão 1.01</string>
+    <string name="build_by">Desenvolvido por Fussy0064</string>
+
+    <string name="channel_task_reminders">Lembretes de tarefas</string>
+    <string name="channel_task_reminders_desc">Lembretes para suas tarefas pendentes</string>
+    <string name="channel_exam_alerts">Alertas de prova</string>
+    <string name="channel_exam_alerts_desc">Alertas de contagem regressiva para provas futuras</string>
+
+    <string-array name="theme_options">
+        <item>Padrão do sistema</item>
+        <item>Claro</item>
+        <item>Escuro</item>
+    </string-array>
+
+    <plurals name="file_count">
+        <item quantity="one">%d arquivo</item>
+        <item quantity="other">%d arquivos</item>
+    </plurals>
+</resources>

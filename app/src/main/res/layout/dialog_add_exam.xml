@@ -13,7 +13,7 @@
             android:id="@+id/tv_dialog_exam_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Exam / Timetable"
+            android:text="@string/add_exam_timetable"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
@@ -22,7 +22,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Exam / Subject Name">
+            android:hint="@string/exam_subject_name_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_exam_name"
                 android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Venue / Room (optional)">
+            android:hint="@string/venue_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_exam_location"
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Date:"
+            android:text="@string/select_date"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Time:"
+            android:text="@string/select_time"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:checked="true"
-            android:text="Set notification reminder (1 day before)" />
+            android:text="@string/set_notif_reminder" />
 
     </LinearLayout>
 </ScrollView>

@@ -9,6 +9,9 @@ import android.provider.OpenableColumns;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +25,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fussy.examfeverplanner.R;
 import com.fussy.examfeverplanner.data.entity.StudyMaterial;
+import com.fussy.examfeverplanner.data.entity.Subject;
+import com.fussy.examfeverplanner.data.entity.Topic;
 import com.fussy.examfeverplanner.viewmodel.StudyMaterialViewModel;
+import com.fussy.examfeverplanner.viewmodel.SubjectViewModel;
+import com.fussy.examfeverplanner.viewmodel.TopicViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,19 +39,25 @@ import java.util.List;
 
 public class MaterialActivity extends BaseActivity {
 
-    // ─── ViewModel ────────────────────────────────────────────────────────────
+    // ─── ViewModels ─────────────────────────────────────────────────────────
     private StudyMaterialViewModel materialViewModel;
+    private SubjectViewModel subjectViewModel;
+    private TopicViewModel topicViewModel;
     private MaterialAdapter adapter;
+
+    private List<Subject> allSubjects = new ArrayList<>();
 
     // ─── State for the Add dialog ─────────────────────────────────────────────
     private TextView tvAddSelectedFiles;
     private final List<Uri> pendingAddUris = new ArrayList<>();
+    private Spinner spinnerAddSubject, spinnerAddTopic;
 
     // ─── State for Group-Edit dialog ──────────────────────────────────────────
     private String editingGroupName;
     private List<StudyMaterial> editingGroupFiles; // existing files in group
     private TextView tvEditSelectedFiles;
     private final List<Uri> pendingEditUris = new ArrayList<>(); // newly picked files
+    private Spinner spinnerEditSubject, spinnerEditTopic;
 
     // ─── State for single-File edit ───────────────────────────────────────────
     private StudyMaterial editingFile;
@@ -115,7 +128,7 @@ public class MaterialActivity extends BaseActivity {
         // File-level listeners
         adapter.setFileDeleteListener(material -> {
             materialViewModel.delete(material);
-            Toast.makeText(this, "File removed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.file_removed, Toast.LENGTH_SHORT).show();
         });
 
         adapter.setFileEditListener(material -> showEditSingleFileDialog(material));
@@ -125,8 +138,15 @@ public class MaterialActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         materialViewModel = new ViewModelProvider(this).get(StudyMaterialViewModel.class);
-        // subjectId = -1 is the global "all materials" bucket
-        materialViewModel.getMaterialsBySubject(-1).observe(this, materials -> {
+        subjectViewModel = new ViewModelProvider(this).get(SubjectViewModel.class);
+        topicViewModel = new ViewModelProvider(this).get(TopicViewModel.class);
+
+        subjectViewModel.getAllSubjects().observe(this, subjects -> allSubjects = subjects != null
+                ? subjects
+                : new ArrayList<>());
+
+        // Study Materials is a global screen — show materials across every subject
+        materialViewModel.getAllMaterials().observe(this, materials -> {
             if (materials != null && !materials.isEmpty()) {
                 tvEmpty.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -141,9 +161,115 @@ public class MaterialActivity extends BaseActivity {
         fabAdd.setOnClickListener(v -> showAddGroupDialog());
     }
 
+    // ─── Subject / Topic spinner wiring ────────────────────────────────────────
+
+    /** Fills the subject spinner and wires it to reload the topic spinner. */
+    private void setupSubjectTopicSpinners(Spinner subjectSpinner, Spinner topicSpinner,
+            Integer preselectSubjectId, Integer preselectTopicId) {
+
+        List<String> subjectNames = new ArrayList<>();
+        for (Subject s : allSubjects)
+            subjectNames.add(s.getName());
+
+        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, subjectNames);
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectSpinner.setAdapter(subjectAdapter);
+
+        int startIndex = 0;
+        if (preselectSubjectId != null) {
+            for (int i = 0; i < allSubjects.size(); i++) {
+                if (allSubjects.get(i).getId() == preselectSubjectId) {
+                    startIndex = i;
+                    break;
+                }
+            }
+        }
+        if (!allSubjects.isEmpty())
+            subjectSpinner.setSelection(startIndex);
+
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < 0 || position >= allSubjects.size())
+                    return;
+                int subjectId = allSubjects.get(position).getId();
+                loadTopicsIntoSpinner(topicSpinner, subjectId,
+                        position == startIndex ? preselectTopicId : null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        if (!allSubjects.isEmpty()) {
+            loadTopicsIntoSpinner(topicSpinner, allSubjects.get(startIndex).getId(), preselectTopicId);
+        }
+    }
+
+    private void loadTopicsIntoSpinner(Spinner topicSpinner, int subjectId, Integer preselectTopicId) {
+        topicViewModel.getTopicsBySubject(subjectId).observe(this, topics -> {
+            List<String> names = new ArrayList<>();
+            List<Integer> ids = new ArrayList<>();
+            names.add(getString(R.string.general_no_topic));
+            ids.add(-1);
+            if (topics != null) {
+                for (Topic t : topics) {
+                    names.add(t.getName());
+                    ids.add(t.getId());
+                }
+            }
+            ArrayAdapter<String> topicAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, names);
+            topicAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            topicSpinner.setAdapter(topicAdapter);
+            topicSpinner.setTag(ids); // stash the parallel id list for lookup on save
+
+            int sel = 0;
+            if (preselectTopicId != null) {
+                int idx = ids.indexOf(preselectTopicId);
+                if (idx >= 0)
+                    sel = idx;
+            }
+            topicSpinner.setSelection(sel);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    private int selectedTopicId(Spinner topicSpinner) {
+        Object tag = topicSpinner.getTag();
+        int position = topicSpinner.getSelectedItemPosition();
+        if (tag instanceof List && position >= 0 && position < ((List<Integer>) tag).size()) {
+            return ((List<Integer>) tag).get(position);
+        }
+        return -1;
+    }
+
+    private Subject selectedSubject(Spinner subjectSpinner) {
+        int position = subjectSpinner.getSelectedItemPosition();
+        if (position >= 0 && position < allSubjects.size())
+            return allSubjects.get(position);
+        return null;
+    }
+
+    /** Builds the folder/group label shown in the list: "Subject • Topic • Title" */
+    private String buildGroupName(String subjectName, String topicName, String title) {
+        StringBuilder sb = new StringBuilder(subjectName);
+        if (topicName != null)
+            sb.append(" • ").append(topicName);
+        if (title != null && !title.isEmpty())
+            sb.append(" • ").append(title);
+        return sb.toString();
+    }
+
     // ─── ADD GROUP dialog ─────────────────────────────────────────────────────
 
     private void showAddGroupDialog() {
+        if (allSubjects.isEmpty()) {
+            Toast.makeText(this, R.string.subject_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
         pendingAddUris.clear();
 
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_material, null);
@@ -151,48 +277,64 @@ public class MaterialActivity extends BaseActivity {
         TextInputEditText etUrl = view.findViewById(R.id.edit_text_material_url);
         MaterialButton btnBrowse = view.findViewById(R.id.btn_pick_file);
         tvAddSelectedFiles = view.findViewById(R.id.tv_selected_file);
+        spinnerAddSubject = view.findViewById(R.id.spinner_material_subject);
+        spinnerAddTopic = view.findViewById(R.id.spinner_material_topic);
 
-        tvAddSelectedFiles.setText("No files selected — Browse to pick one or more");
+        setupSubjectTopicSpinners(spinnerAddSubject, spinnerAddTopic, null, null);
+
+        tvAddSelectedFiles.setText(R.string.no_files_selected_browse);
 
         btnBrowse.setOnClickListener(v -> addFilePicker.launch(multiFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("Add Study Materials")
+                .setTitle(R.string.add_study_materials)
                 .setView(view)
-                .setPositiveButton("Add", (d, w) -> {
+                .setPositiveButton(R.string.action_add, (d, w) -> {
                     String title = etTitle.getText().toString().trim();
                     String url = etUrl.getText().toString().trim();
 
-                    if (title.isEmpty()) {
-                        Toast.makeText(this, "Please enter a group title", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     if (pendingAddUris.isEmpty() && url.isEmpty()) {
-                        Toast.makeText(this, "Add at least one file or URL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.add_file_or_url_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
+                    Subject subject = selectedSubject(spinnerAddSubject);
+                    if (subject == null) {
+                        Toast.makeText(this, R.string.subject_required, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    int topicId = selectedTopicId(spinnerAddTopic);
+                    String topicName = topicId == -1 ? null
+                            : ((ArrayAdapter<String>) spinnerAddTopic.getAdapter())
+                                    .getItem(spinnerAddTopic.getSelectedItemPosition());
+                    String groupName = buildGroupName(subject.getName(), topicName, title);
+
                     int count = 0;
-                    // Insert each selected file — all share the same groupName = title
+                    // Insert each selected file — all share the same groupName
                     for (int i = 0; i < pendingAddUris.size(); i++) {
-                        String fileTitle = pendingAddUris.size() == 1
+                        String fileTitle = pendingAddUris.size() == 1 && !title.isEmpty()
                                 ? title
                                 : fileNameOf(pendingAddUris.get(i));
-                        materialViewModel.insert(new StudyMaterial(
+                        StudyMaterial m = new StudyMaterial(
                                 fileTitle, pendingAddUris.get(i).toString(),
-                                -1, false, title));
+                                subject.getId(), false, groupName);
+                        m.setTopicId(topicId);
+                        materialViewModel.insert(m);
                         count++;
                     }
                     // Insert URL if provided
                     if (!url.isEmpty()) {
-                        materialViewModel.insert(new StudyMaterial(
-                                url, url, -1, true, title));
+                        StudyMaterial m = new StudyMaterial(
+                                title.isEmpty() ? url : title, url,
+                                subject.getId(), true, groupName);
+                        m.setTopicId(topicId);
+                        materialViewModel.insert(m);
                         count++;
                     }
-                    Toast.makeText(this, "\u2705 " + count + " item(s) added under '" + title + "'",
+                    Toast.makeText(this, getString(R.string.items_added_under, count, groupName),
                             Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show();
     }
 
@@ -208,49 +350,68 @@ public class MaterialActivity extends BaseActivity {
         TextInputEditText etUrl = view.findViewById(R.id.edit_text_material_url);
         MaterialButton btnBrowse = view.findViewById(R.id.btn_pick_file);
         tvEditSelectedFiles = view.findViewById(R.id.tv_selected_file);
+        spinnerEditSubject = view.findViewById(R.id.spinner_material_subject);
+        spinnerEditTopic = view.findViewById(R.id.spinner_material_topic);
 
-        etTitle.setText(groupName);
-        tvEditSelectedFiles.setText(existingFiles.size() + " existing file(s) — Browse to add more");
+        StudyMaterial first = existingFiles.isEmpty() ? null : existingFiles.get(0);
+        setupSubjectTopicSpinners(spinnerEditSubject, spinnerEditTopic,
+                first != null ? first.getSubjectId() : null,
+                first != null ? first.getTopicId() : null);
+
+        tvEditSelectedFiles.setText(getString(R.string.existing_files_browse_more, existingFiles.size()));
 
         btnBrowse.setOnClickListener(v -> editGroupFilePicker.launch(multiFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("Edit Group: " + groupName)
+                .setTitle(getString(R.string.edit_group_title, groupName))
                 .setView(view)
-                .setPositiveButton("Save", (d, w) -> {
+                .setPositiveButton(R.string.action_save, (d, w) -> {
                     String newTitle = etTitle.getText().toString().trim();
                     String url = etUrl.getText().toString().trim();
 
-                    if (newTitle.isEmpty()) {
-                        Toast.makeText(this, "Please enter a group title", Toast.LENGTH_SHORT).show();
+                    Subject subject = selectedSubject(spinnerEditSubject);
+                    if (subject == null) {
+                        Toast.makeText(this, R.string.subject_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    int topicId = selectedTopicId(spinnerEditTopic);
+                    String topicName = topicId == -1 ? null
+                            : ((ArrayAdapter<String>) spinnerEditTopic.getAdapter())
+                                    .getItem(spinnerEditTopic.getSelectedItemPosition());
+                    String newGroupName = buildGroupName(subject.getName(), topicName,
+                            newTitle.isEmpty() ? null : newTitle);
 
-                    // Rename all existing files in the group
+                    // Update subject/topic/group on all existing files in the group
                     for (StudyMaterial m : editingGroupFiles) {
-                        m.setGroupName(newTitle);
+                        m.setGroupName(newGroupName);
+                        m.setSubjectId(subject.getId());
+                        m.setTopicId(topicId);
                         materialViewModel.update(m);
                     }
 
-                    // Insert newly picked files under the (new) group name
+                    // Insert newly picked files under the (new) group
                     for (Uri uri : pendingEditUris) {
-                        materialViewModel.insert(new StudyMaterial(
+                        StudyMaterial m = new StudyMaterial(
                                 fileNameOf(uri), uri.toString(),
-                                -1, false, newTitle));
+                                subject.getId(), false, newGroupName);
+                        m.setTopicId(topicId);
+                        materialViewModel.insert(m);
                     }
 
                     // Insert new URL if provided
                     if (!url.isEmpty()) {
-                        materialViewModel.insert(new StudyMaterial(
-                                url, url, -1, true, newTitle));
+                        StudyMaterial m = new StudyMaterial(url, url, subject.getId(), true, newGroupName);
+                        m.setTopicId(topicId);
+                        materialViewModel.insert(m);
                     }
 
                     int added = pendingEditUris.size() + (url.isEmpty() ? 0 : 1);
                     Toast.makeText(this,
-                            "Group updated" + (added > 0 ? ", " + added + " item(s) added" : ""),
+                            added > 0 ? getString(R.string.group_updated_with_added, added)
+                                    : getString(R.string.group_updated),
                             Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show();
     }
 
@@ -265,24 +426,35 @@ public class MaterialActivity extends BaseActivity {
         MaterialButton btnBrowse = view.findViewById(R.id.btn_pick_file);
         tvSingleEditFile = view.findViewById(R.id.tv_selected_file);
 
+        // Single-file edit also lets the user re-file it under a different subject/topic
+        Spinner subjectSpinner = view.findViewById(R.id.spinner_material_subject);
+        Spinner topicSpinner = view.findViewById(R.id.spinner_material_topic);
+        setupSubjectTopicSpinners(subjectSpinner, topicSpinner,
+                material.getSubjectId(), material.getTopicId());
+
         etTitle.setText(material.getTitle());
         if (material.isLink())
             etUrl.setText(material.getFilePathOrUrl());
         tvSingleEditFile.setText(material.isLink()
-                ? "Currently a link"
+                ? getString(R.string.currently_a_link)
                 : fileNameOf(Uri.parse(material.getFilePathOrUrl())));
 
         btnBrowse.setOnClickListener(v -> singleFilePicker.launch(singleFilePicker()));
 
         new AlertDialog.Builder(this)
-                .setTitle("Edit File")
+                .setTitle(R.string.edit_file_title)
                 .setView(view)
-                .setPositiveButton("Save", (d, w) -> {
+                .setPositiveButton(R.string.action_save, (d, w) -> {
                     String title = etTitle.getText().toString().trim();
                     String url = etUrl.getText().toString().trim();
                     if (title.isEmpty()) {
-                        Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.title_cannot_be_empty, Toast.LENGTH_SHORT).show();
                         return;
+                    }
+                    Subject subject = selectedSubject(subjectSpinner);
+                    if (subject != null) {
+                        material.setSubjectId(subject.getId());
+                        material.setTopicId(selectedTopicId(topicSpinner));
                     }
                     material.setTitle(title);
                     if (!url.isEmpty()) {
@@ -290,9 +462,9 @@ public class MaterialActivity extends BaseActivity {
                         material.setLink(true);
                     }
                     materialViewModel.update(material);
-                    Toast.makeText(this, "File updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.file_updated, Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show();
     }
 
@@ -300,13 +472,13 @@ public class MaterialActivity extends BaseActivity {
 
     private void confirmDeleteGroup(String groupName) {
         new AlertDialog.Builder(this)
-                .setTitle("Delete Group")
-                .setMessage("Delete all files under '" + groupName + "'?")
-                .setPositiveButton("Delete All", (d, w) -> {
+                .setTitle(R.string.delete_group_title)
+                .setMessage(getString(R.string.delete_group_message, groupName))
+                .setPositiveButton(R.string.action_delete_all, (d, w) -> {
                     materialViewModel.deleteByGroup(groupName, -1);
-                    Toast.makeText(this, "Group deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.group_deleted, Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show();
     }
 
@@ -323,7 +495,7 @@ public class MaterialActivity extends BaseActivity {
             }
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(this, "Could not find an app to open this file", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.could_not_open_file, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -347,11 +519,11 @@ public class MaterialActivity extends BaseActivity {
         if (tvAddSelectedFiles == null)
             return;
         if (pendingAddUris.isEmpty()) {
-            tvAddSelectedFiles.setText("No files selected");
+            tvAddSelectedFiles.setText(R.string.no_files_selected);
         } else if (pendingAddUris.size() == 1) {
             tvAddSelectedFiles.setText(fileNameOf(pendingAddUris.get(0)));
         } else {
-            tvAddSelectedFiles.setText(pendingAddUris.size() + " files selected");
+            tvAddSelectedFiles.setText(getString(R.string.files_selected_count, pendingAddUris.size()));
         }
     }
 
@@ -359,10 +531,10 @@ public class MaterialActivity extends BaseActivity {
         if (tvEditSelectedFiles == null)
             return;
         if (pendingEditUris.isEmpty()) {
-            tvEditSelectedFiles.setText(editingGroupFiles.size() + " existing file(s)");
+            tvEditSelectedFiles.setText(getString(R.string.existing_files_label, editingGroupFiles.size()));
         } else {
-            tvEditSelectedFiles.setText(editingGroupFiles.size() + " existing + "
-                    + pendingEditUris.size() + " new file(s) to add");
+            tvEditSelectedFiles.setText(getString(R.string.existing_plus_new_files,
+                    editingGroupFiles.size(), pendingEditUris.size()));
         }
     }
 

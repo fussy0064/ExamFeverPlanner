@@ -1,0 +1,150 @@
+<resources>
+    <string name="app_name">Exam Fever Planner</string>
+
+    <string name="action_add">Ongeza</string>
+    <string name="action_save">Hifadhi</string>
+    <string name="action_cancel">Ghairi</string>
+    <string name="action_delete">Futa</string>
+    <string name="action_delete_all">Futa Zote</string>
+
+    <string name="welcome_back">Karibu Tena!</string>
+    <string name="dashboard_subjects_topics">Masomo na\nMada</string>
+    <string name="dashboard_todo_lists">Orodha ya\nKazi</string>
+    <string name="dashboard_exam_countdown">Kipima Muda\nwa Mtihani</string>
+    <string name="dashboard_study_materials">Vifaa vya\nKusoma</string>
+    <string name="tasks_pending_summary">Una kazi %1$d zinazosubiri leo.</string>
+    <string name="tasks_all_caught_up">Umemaliza kazi zote! Hakuna kazi zinazosubiri.</string>
+
+    <string name="subjects_empty">Hakuna masomo bado. Gusa + kuongeza moja.</string>
+    <string name="add_new_subject">Ongeza Somo Jipya</string>
+    <string name="edit_subject">Hariri Somo</string>
+    <string name="subject_name_hint">Jina la Somo</string>
+    <string name="delete_subject_title">Futa Somo</string>
+    <string name="delete_subject_message">Futa \"%1$s\" pamoja na mada zake zote?</string>
+    <string name="topics_available">Mada zilizopo</string>
+
+    <string name="topics_empty">Hakuna mada bado. Gusa + kuongeza moja.</string>
+    <string name="topics_title_fallback">Mada</string>
+    <string name="topics_of_subject">%1$s — Mada</string>
+    <string name="add_new_topic">Ongeza Mada Mpya</string>
+    <string name="edit_topic">Hariri Mada</string>
+    <string name="topic_name_hint">Jina la Mada</string>
+    <string name="delete_topic_title">Futa Mada</string>
+    <string name="delete_topic_message">Futa \"%1$s\"?</string>
+
+    <string name="tasks_empty">Hakuna kazi zinazosubiri!</string>
+    <string name="add_new_task">Ongeza Kazi Mpya</string>
+    <string name="edit_task">Hariri Kazi</string>
+    <string name="task_title_hint">Kichwa cha Kazi</string>
+    <string name="task_desc_hint">Maelezo (hiari)</string>
+    <string name="pick_date">Chagua Tarehe</string>
+    <string name="pick_time">Chagua Muda</string>
+    <string name="no_reminder_set">Hakuna kikumbusho kilichowekwa</string>
+    <string name="action_add_task">Ongeza Kazi</string>
+    <string name="task_title_required">Tafadhali weka kichwa cha kazi</string>
+    <string name="task_deleted">Kazi imefutwa</string>
+    <string name="task_updated">Kazi imesasishwa</string>
+    <string name="task_reminder_msg">Muda wa kufanya: %1$s</string>
+    <string name="task_reminder_title">Kikumbusho cha Kazi: %1$s</string>
+    <string name="reminder_set_for">Kikumbusho kimewekwa kwa %1$s</string>
+    <string name="delete_task_title">Futa Kazi</string>
+    <string name="delete_task_message">Futa \"%1$s\"?</string>
+
+    <string name="exams_empty">Hakuna mitihani bado. Ongeza moja kufuatilia!</string>
+    <string name="add_exam_timetable">Ongeza Mtihani / Ratiba</string>
+    <string name="exam_subject_name_hint">Jina la Mtihani / Somo</string>
+    <string name="venue_hint">Mahali / Chumba (hiari)</string>
+    <string name="select_date">Chagua Tarehe:</string>
+    <string name="select_time">Chagua Muda:</string>
+    <string name="set_notif_reminder">Weka kikumbusho cha arifa (siku 1 kabla)</string>
+    <string name="action_add_exam">Ongeza Mtihani</string>
+    <string name="exam_name_required">Tafadhali weka jina la mtihani</string>
+    <string name="exam_saved_title">Mtihani Umehifadhiwa: %1$s</string>
+    <string name="exam_saved_msg">Mtihani umepangwa kwa %1$s%2$s. Uko tayari!</string>
+    <string name="edit_exam">Hariri Mtihani</string>
+    <string name="exam_updated_title">Mtihani Umesasishwa: %1$s</string>
+    <string name="exam_updated_msg">Umepangwa upya kwa %1$s%2$s</string>
+    <string name="exam_updated_toast">Mtihani umesasishwa</string>
+    <string name="exam_tomorrow_title">Mtihani Kesho: %1$s</string>
+    <string name="exam_tomorrow_msg">Mtihani wako ni saa %1$s%2$s. Jiandae usiku wa leo!</string>
+    <string name="exam_1hr_title">Saa 1 Imesalia: %1$s</string>
+    <string name="exam_1hr_msg">Mtihani wako unaanza baada ya saa 1 %1$s%2$s. Bahati njema!</string>
+    <string name="exam_now_title">Mtihani Sasa: %1$s</string>
+    <string name="exam_now_msg">Mtihani wako unapaswa kuanza sasa %1$s%2$s</string>
+    <string name="reminders_set_msg">Vikumbusho vimewekwa: siku 1 kabla, saa 1 kabla &amp; wakati wa mtihani</string>
+    <string name="delete_exam_title">Futa Mtihani</string>
+    <string name="delete_exam_message">Futa \"%1$s\"?</string>
+    <string name="exam_done_label">Imekamilika!</string>
+    <string name="exam_date_not_set">Tarehe: Haijawekwa</string>
+    <string name="location_suffix_at"> saa %1$s</string>
+    <string name="location_suffix_in"> katika %1$s</string>
+
+    <string name="materials_empty">Hakuna vifaa bado. Gusa + kuongeza.</string>
+    <string name="add_study_materials">Ongeza Vifaa vya Kusoma</string>
+    <string name="material_title_hint">Kichwa</string>
+    <string name="material_url_hint">URL / Kiungo cha Wavuti (hiari)</string>
+    <string name="browse_phone_storage">Vinjari Hifadhi ya Simu</string>
+    <string name="no_file_selected">Hakuna faili lililochaguliwa</string>
+    <string name="or_pick_from_phone">— AU chagua faili kutoka simu —</string>
+    <string name="no_files_selected_browse">Hakuna faili zilizochaguliwa — Vinjari kuchagua moja au zaidi</string>
+    <string name="no_files_selected">Hakuna faili zilizochaguliwa</string>
+    <string name="files_selected_count">Faili %1$d zimechaguliwa</string>
+    <string name="group_title_required">Tafadhali weka kichwa cha kikundi</string>
+    <string name="add_file_or_url_required">Ongeza angalau faili moja au URL</string>
+    <string name="items_added_under">Vipengele %1$d vimeongezwa chini ya \'%2$s\'</string>
+    <string name="edit_group_title">Hariri Kikundi: %1$s</string>
+    <string name="group_updated">Kikundi kimesasishwa</string>
+    <string name="group_updated_with_added">Kikundi kimesasishwa, vipengele %1$d vimeongezwa</string>
+    <string name="existing_files_browse_more">Faili %1$d zilizopo — Vinjari kuongeza zaidi</string>
+    <string name="existing_files_label">Faili %1$d zilizopo</string>
+    <string name="existing_plus_new_files">Faili %1$d zilizopo + faili %2$d mpya za kuongeza</string>
+    <string name="edit_file_title">Hariri Faili</string>
+    <string name="title_cannot_be_empty">Kichwa hakiwezi kuwa tupu</string>
+    <string name="file_updated">Faili imesasishwa</string>
+    <string name="delete_group_title">Futa Kikundi</string>
+    <string name="delete_group_message">Futa faili zote chini ya \'%1$s\'?</string>
+    <string name="group_deleted">Kikundi kimefutwa</string>
+    <string name="file_removed">Faili imeondolewa</string>
+    <string name="currently_a_link">Kwa sasa ni kiungo</string>
+    <string name="could_not_open_file">Imeshindwa kupata programu ya kufungua faili hili</string>
+    <string name="select_subject">Chagua Somo</string>
+    <string name="select_topic">Chagua Mada (hiari)</string>
+    <string name="general_no_topic">Jumla (hakuna mada)</string>
+    <string name="subject_required">Tafadhali chagua somo</string>
+
+    <string name="settings_title">Mipangilio</string>
+    <string name="settings_appearance">Muonekano</string>
+    <string name="settings_theme">Mandhari</string>
+    <string name="settings_language">Lugha</string>
+    <string name="settings_notifications">Arifa</string>
+    <string name="settings_notification_sound">Sauti ya Arifa</string>
+    <string name="settings_enable_reminders">Wezesha Vikumbusho</string>
+    <string name="settings_about">Kuhusu</string>
+    <string name="app_tagline">Rafiki yako wa kupanga mitihani.</string>
+    <string name="choose_theme">Chagua Mandhari</string>
+    <string name="choose_language">Chagua Lugha</string>
+    <string name="theme_system_default">Chaguo-msingi la Mfumo</string>
+    <string name="theme_light">Nyepesi</string>
+    <string name="theme_dark">Nyeusi</string>
+    <string name="sound_default">Chaguo-msingi</string>
+    <string name="sound_custom">Maalum</string>
+    <string name="select_notification_sound">Chagua Sauti ya Arifa</string>
+    <string name="version_label">Toleo 1.01</string>
+    <string name="build_by">Imetengenezwa na Fussy0064</string>
+
+    <string name="channel_task_reminders">Vikumbusho vya Kazi</string>
+    <string name="channel_task_reminders_desc">Vikumbusho vya kazi zako</string>
+    <string name="channel_exam_alerts">Arifa za Mtihani</string>
+    <string name="channel_exam_alerts_desc">Arifa za kuhesabu siku za mitihani ijayo</string>
+
+    <string-array name="theme_options">
+        <item>Chaguo-msingi la Mfumo</item>
+        <item>Nyepesi</item>
+        <item>Nyeusi</item>
+    </string-array>
+
+    <plurals name="file_count">
+        <item quantity="one">faili %d</item>
+        <item quantity="other">faili %d</item>
+    </plurals>
+</resources>

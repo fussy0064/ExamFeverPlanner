@@ -65,9 +65,9 @@ public class SettingsActivity extends BaseActivity {
         loadCurrentValues();
 
         // ── THEME ──────────────────────────────────────────────────────────
-        final String[] themes = { "System Default", "Light", "Dark" };
+        final String[] themes = getResources().getStringArray(R.array.theme_options);
         findViewById(R.id.row_theme).setOnClickListener(v -> new AlertDialog.Builder(this)
-                .setTitle("Choose Theme")
+                .setTitle(R.string.choose_theme)
                 .setItems(themes, (d, which) -> {
                     prefs.edit().putInt(KEY_THEME, which).apply();
                     tvTheme.setText(themes[which]);
@@ -82,7 +82,7 @@ public class SettingsActivity extends BaseActivity {
         final String[] langCodes = { "en", "sw", "fr", "ar", "es", "pt", "zh" };
 
         findViewById(R.id.row_language).setOnClickListener(v -> new AlertDialog.Builder(this)
-                .setTitle("Choose Language")
+                .setTitle(R.string.choose_language)
                 .setItems(langNames, (d, which) -> {
                     String code = langCodes[which];
                     String name = langNames[which];
@@ -108,7 +108,7 @@ public class SettingsActivity extends BaseActivity {
                     : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Notification Sound");
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.select_notification_sound));
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, existingUri);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
@@ -123,7 +123,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void loadCurrentValues() {
         int themeIdx = prefs.getInt(KEY_THEME, 0);
-        String[] themes = { "System Default", "Light", "Dark" };
+        String[] themes = getResources().getStringArray(R.array.theme_options);
         tvTheme.setText(themes[Math.min(themeIdx, themes.length - 1)]);
 
         // Show display name for the stored code
@@ -134,7 +134,7 @@ public class SettingsActivity extends BaseActivity {
         if (savedUri != null)
             updateSoundLabel(Uri.parse(savedUri));
         else
-            tvSound.setText("Default");
+            tvSound.setText(R.string.sound_default);
 
         switchNotif.setChecked(prefs.getBoolean(KEY_NOTIF_ON, true));
     }
@@ -142,9 +142,9 @@ public class SettingsActivity extends BaseActivity {
     private void updateSoundLabel(Uri uri) {
         try {
             Ringtone ring = RingtoneManager.getRingtone(this, uri);
-            tvSound.setText(ring != null ? ring.getTitle(this) : "Custom");
+            tvSound.setText(ring != null ? ring.getTitle(this) : getString(R.string.sound_custom));
         } catch (Exception e) {
-            tvSound.setText("Custom");
+            tvSound.setText(R.string.sound_custom);
         }
     }
 

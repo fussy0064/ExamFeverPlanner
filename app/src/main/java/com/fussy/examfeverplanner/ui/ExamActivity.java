@@ -79,11 +79,11 @@ public class ExamActivity extends BaseActivity {
 
         timePicker.setIs24HourView(false);
 
-        builder.setPositiveButton("Add Exam", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_add_exam, (dialog, which) -> {
             String title = editTextExamName.getText().toString().trim();
             String location = editTextExamLocation.getText().toString().trim();
             if (title.isEmpty()) {
-                Toast.makeText(this, "Please enter an exam name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.exam_name_required, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -100,11 +100,11 @@ public class ExamActivity extends BaseActivity {
             examViewModel.insert(newExam);
 
             // ── Always fire an instant confirmation notification ──────────────
-            String locationSuffix = location.isEmpty() ? "" : " at " + location;
+            String locationSuffix = location.isEmpty() ? "" : getString(R.string.location_suffix_at, location);
             NotificationHelper.sendNow(this,
                     ("confirm_" + title + System.currentTimeMillis()).hashCode(),
-                    "Exam Saved: " + title,
-                    "Exam scheduled for " + timeStr + locationSuffix + ". You're all set!",
+                    getString(R.string.exam_saved_title, title),
+                    getString(R.string.exam_saved_msg, timeStr, locationSuffix),
                     NotificationHelper.CHANNEL_ID_EXAMS);
 
             // ── Schedule multi-stage reminders if checkbox is ticked ──────────
@@ -113,7 +113,7 @@ public class ExamActivity extends BaseActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
@@ -126,7 +126,7 @@ public class ExamActivity extends BaseActivity {
         // Change dialog title label
         TextView tvTitle = dialogView.findViewById(R.id.tv_dialog_exam_title);
         if (tvTitle != null)
-            tvTitle.setText("Edit Exam");
+            tvTitle.setText(R.string.edit_exam);
 
         TextInputEditText editTextExamName = dialogView.findViewById(R.id.edit_text_exam_name);
         TextInputEditText editTextExamLocation = dialogView.findViewById(R.id.edit_text_exam_location);
@@ -150,11 +150,11 @@ public class ExamActivity extends BaseActivity {
         timePicker.setHour(existing.get(Calendar.HOUR_OF_DAY));
         timePicker.setMinute(existing.get(Calendar.MINUTE));
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_save, (dialog, which) -> {
             String title = editTextExamName.getText().toString().trim();
             String location = editTextExamLocation.getText().toString().trim();
             if (title.isEmpty()) {
-                Toast.makeText(this, "Please enter an exam name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.exam_name_required, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -180,21 +180,21 @@ public class ExamActivity extends BaseActivity {
             examViewModel.update(exam);
 
             // Instant confirmation
-            String locationSuffix = location.isEmpty() ? "" : " at " + location;
+            String locationSuffix = location.isEmpty() ? "" : getString(R.string.location_suffix_at, location);
             NotificationHelper.sendNow(this,
                     ("edit_" + title + System.currentTimeMillis()).hashCode(),
-                    "Exam Updated: " + title,
-                    "Rescheduled to " + timeStr + locationSuffix,
+                    getString(R.string.exam_updated_title, title),
+                    getString(R.string.exam_updated_msg, timeStr, locationSuffix),
                     NotificationHelper.CHANNEL_ID_EXAMS);
 
             if (checkBoxReminder.isChecked()) {
                 scheduleExamReminders(title, location, timeStr, calendar.getTimeInMillis());
             }
 
-            Toast.makeText(this, "Exam updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.exam_updated_toast, Toast.LENGTH_SHORT).show();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
@@ -209,34 +209,34 @@ public class ExamActivity extends BaseActivity {
      */
     private void scheduleExamReminders(String title, String location,
             String timeStr, long examMs) {
-        String loc = location.isEmpty() ? "" : " in " + location;
+        String loc = location.isEmpty() ? "" : getString(R.string.location_suffix_in, location);
         int baseCode = title.hashCode();
 
         // 1 – 24 h before
         long oneDayBefore = examMs - (24 * 60 * 60 * 1000L);
         NotificationHelper.scheduleAlarm(this, oneDayBefore,
                 baseCode,
-                "Exam Tomorrow: " + title,
-                "Your exam is at " + timeStr + loc + ". Prepare tonight!",
+                getString(R.string.exam_tomorrow_title, title),
+                getString(R.string.exam_tomorrow_msg, timeStr, loc),
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
         // 2 – 1 hour before
         long oneHourBefore = examMs - (60 * 60 * 1000L);
         NotificationHelper.scheduleAlarm(this, oneHourBefore,
                 baseCode + 1,
-                "1 Hour Left: " + title,
-                "Your exam starts in 1 hour at " + timeStr + loc + ". Good luck!",
+                getString(R.string.exam_1hr_title, title),
+                getString(R.string.exam_1hr_msg, timeStr, loc),
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
         // 3 – Exactly at exam time
         NotificationHelper.scheduleAlarm(this, examMs,
                 baseCode + 2,
-                "Exam Now: " + title,
-                "Your exam should be starting now at " + timeStr + loc,
+                getString(R.string.exam_now_title, title),
+                getString(R.string.exam_now_msg, timeStr, loc),
                 NotificationHelper.CHANNEL_ID_EXAMS);
 
         Toast.makeText(this,
-                "Reminders set: 1 day before, 1 hour before & at exam time",
+                R.string.reminders_set_msg,
                 Toast.LENGTH_LONG).show();
     }
 }

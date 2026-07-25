@@ -88,9 +88,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
         });
 
         holder.btnDelete.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
-                .setTitle("Delete Task")
-                .setMessage("Delete \"" + currentTask.getTitle() + "\"?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_task_title)
+                .setMessage(v.getContext().getString(R.string.delete_task_message, currentTask.getTitle()))
+                .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     NotificationHelper.cancelAlarm(v.getContext(), currentTask.getId());
                     int pos = holder.getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
@@ -100,7 +100,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskHolder> {
                     if (deleteListener != null)
                         deleteListener.onDelete(currentTask);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show());
 
         holder.btnEdit.setOnClickListener(v -> {

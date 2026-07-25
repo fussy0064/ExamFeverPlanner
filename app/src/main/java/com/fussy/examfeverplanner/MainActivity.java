@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         taskViewModel.getPendingTasks().observe(this, tasks -> {
             if (tasks != null && !tasks.isEmpty()) {
-                summaryText.setText("You have " + tasks.size() + " pending tasks.");
+                summaryText.setText(getString(R.string.tasks_pending_summary, tasks.size()));
             } else {
-                summaryText.setText("All caught up! No pending tasks.");
+                summaryText.setText(getString(R.string.tasks_all_caught_up));
             }
         });
 

@@ -1,0 +1,153 @@
+<resources>
+    <string name="app_name">Exam Fever Planner</string>
+
+    <string name="action_add">إضافة</string>
+    <string name="action_save">حفظ</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_delete_all">حذف الكل</string>
+
+    <string name="welcome_back">مرحبًا بعودتك!</string>
+    <string name="dashboard_subjects_topics">المواد\nوالمواضيع</string>
+    <string name="dashboard_todo_lists">قوائم\nالمهام</string>
+    <string name="dashboard_exam_countdown">العد التنازلي\nللامتحان</string>
+    <string name="dashboard_study_materials">مواد\nالدراسة</string>
+    <string name="tasks_pending_summary">لديك %1$d مهام قيد الانتظار اليوم.</string>
+    <string name="tasks_all_caught_up">كل شيء منجز! لا توجد مهام معلقة.</string>
+
+    <string name="subjects_empty">لا توجد مواد بعد. اضغط + لإضافة واحدة.</string>
+    <string name="add_new_subject">إضافة مادة جديدة</string>
+    <string name="edit_subject">تعديل المادة</string>
+    <string name="subject_name_hint">اسم المادة</string>
+    <string name="delete_subject_title">حذف المادة</string>
+    <string name="delete_subject_message">هل تريد حذف \"%1$s\" وجميع مواضيعها؟</string>
+    <string name="topics_available">المواضيع المتاحة</string>
+
+    <string name="topics_empty">لا توجد مواضيع بعد. اضغط + لإضافة واحد.</string>
+    <string name="topics_title_fallback">المواضيع</string>
+    <string name="topics_of_subject">%1$s — المواضيع</string>
+    <string name="add_new_topic">إضافة موضوع جديد</string>
+    <string name="edit_topic">تعديل الموضوع</string>
+    <string name="topic_name_hint">اسم الموضوع</string>
+    <string name="delete_topic_title">حذف الموضوع</string>
+    <string name="delete_topic_message">هل تريد حذف \"%1$s\"؟</string>
+
+    <string name="tasks_empty">لا توجد مهام معلقة!</string>
+    <string name="add_new_task">إضافة مهمة جديدة</string>
+    <string name="edit_task">تعديل المهمة</string>
+    <string name="task_title_hint">عنوان المهمة</string>
+    <string name="task_desc_hint">الوصف (اختياري)</string>
+    <string name="pick_date">اختر التاريخ</string>
+    <string name="pick_time">اختر الوقت</string>
+    <string name="no_reminder_set">لم يتم تعيين تذكير</string>
+    <string name="action_add_task">إضافة مهمة</string>
+    <string name="task_title_required">يرجى إدخال عنوان المهمة</string>
+    <string name="task_deleted">تم حذف المهمة</string>
+    <string name="task_updated">تم تحديث المهمة</string>
+    <string name="task_reminder_msg">حان وقت إنجاز: %1$s</string>
+    <string name="task_reminder_title">تذكير بالمهمة: %1$s</string>
+    <string name="reminder_set_for">تم ضبط التذكير في %1$s</string>
+    <string name="delete_task_title">حذف المهمة</string>
+    <string name="delete_task_message">هل تريد حذف \"%1$s\"؟</string>
+
+    <string name="exams_empty">لا توجد امتحانات بعد. أضف واحدًا لتتبعه!</string>
+    <string name="add_exam_timetable">إضافة امتحان / جدول</string>
+    <string name="exam_subject_name_hint">اسم الامتحان / المادة</string>
+    <string name="venue_hint">المكان / القاعة (اختياري)</string>
+    <string name="select_date">اختر التاريخ:</string>
+    <string name="select_time">اختر الوقت:</string>
+    <string name="set_notif_reminder">ضبط تذكير بالإشعار (قبل يوم واحد)</string>
+    <string name="action_add_exam">إضافة امتحان</string>
+    <string name="exam_name_required">يرجى إدخال اسم الامتحان</string>
+    <string name="exam_saved_title">تم حفظ الامتحان: %1$s</string>
+    <string name="exam_saved_msg">تمت جدولة الامتحان في %1$s%2$s. أنت جاهز الآن!</string>
+    <string name="edit_exam">تعديل الامتحان</string>
+    <string name="exam_updated_title">تم تحديث الامتحان: %1$s</string>
+    <string name="exam_updated_msg">تمت إعادة الجدولة إلى %1$s%2$s</string>
+    <string name="exam_updated_toast">تم تحديث الامتحان</string>
+    <string name="exam_tomorrow_title">امتحان غدًا: %1$s</string>
+    <string name="exam_tomorrow_msg">امتحانك في %1$s%2$s. استعد الليلة!</string>
+    <string name="exam_1hr_title">تبقت ساعة واحدة: %1$s</string>
+    <string name="exam_1hr_msg">يبدأ امتحانك خلال ساعة واحدة في %1$s%2$s. بالتوفيق!</string>
+    <string name="exam_now_title">الامتحان الآن: %1$s</string>
+    <string name="exam_now_msg">من المفترض أن يبدأ امتحانك الآن في %1$s%2$s</string>
+    <string name="reminders_set_msg">تم ضبط التذكيرات: قبل يوم، قبل ساعة، وعند وقت الامتحان</string>
+    <string name="delete_exam_title">حذف الامتحان</string>
+    <string name="delete_exam_message">هل تريد حذف \"%1$s\"؟</string>
+    <string name="exam_done_label">تم!</string>
+    <string name="exam_date_not_set">التاريخ: غير محدد</string>
+    <string name="location_suffix_at"> في %1$s</string>
+    <string name="location_suffix_in"> في %1$s</string>
+
+    <string name="materials_empty">لا توجد مواد بعد. اضغط + للإضافة.</string>
+    <string name="add_study_materials">إضافة مواد دراسية</string>
+    <string name="material_title_hint">العنوان</string>
+    <string name="material_url_hint">رابط ويب (اختياري)</string>
+    <string name="browse_phone_storage">تصفح تخزين الهاتف</string>
+    <string name="no_file_selected">لم يتم تحديد ملف</string>
+    <string name="or_pick_from_phone">— أو اختر ملفًا من الهاتف —</string>
+    <string name="no_files_selected_browse">لم يتم تحديد ملفات — تصفح لاختيار واحد أو أكثر</string>
+    <string name="no_files_selected">لم يتم تحديد ملفات</string>
+    <string name="files_selected_count">تم تحديد %1$d ملفات</string>
+    <string name="group_title_required">يرجى إدخال عنوان للمجموعة</string>
+    <string name="add_file_or_url_required">أضف ملفًا واحدًا على الأقل أو رابطًا</string>
+    <string name="items_added_under">تمت إضافة %1$d عنصر(عناصر) ضمن \'%2$s\'</string>
+    <string name="edit_group_title">تعديل المجموعة: %1$s</string>
+    <string name="group_updated">تم تحديث المجموعة</string>
+    <string name="group_updated_with_added">تم تحديث المجموعة، وتمت إضافة %1$d عنصر(عناصر)</string>
+    <string name="existing_files_browse_more">%1$d ملف(ات) حالية — تصفح لإضافة المزيد</string>
+    <string name="existing_files_label">%1$d ملف(ات) حالية</string>
+    <string name="existing_plus_new_files">%1$d حالية + %2$d ملف(ات) جديدة للإضافة</string>
+    <string name="edit_file_title">تعديل الملف</string>
+    <string name="title_cannot_be_empty">لا يمكن أن يكون العنوان فارغًا</string>
+    <string name="file_updated">تم تحديث الملف</string>
+    <string name="delete_group_title">حذف المجموعة</string>
+    <string name="delete_group_message">هل تريد حذف جميع الملفات ضمن \'%1$s\'؟</string>
+    <string name="group_deleted">تم حذف المجموعة</string>
+    <string name="file_removed">تمت إزالة الملف</string>
+    <string name="currently_a_link">حاليًا رابط</string>
+    <string name="could_not_open_file">تعذر العثور على تطبيق لفتح هذا الملف</string>
+    <string name="select_subject">اختر المادة</string>
+    <string name="select_topic">اختر الموضوع (اختياري)</string>
+    <string name="general_no_topic">عام (بدون موضوع)</string>
+    <string name="subject_required">يرجى اختيار مادة</string>
+
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_theme">السمة</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_notifications">الإشعارات</string>
+    <string name="settings_notification_sound">صوت الإشعار</string>
+    <string name="settings_enable_reminders">تفعيل التذكيرات</string>
+    <string name="settings_about">حول التطبيق</string>
+    <string name="app_tagline">رفيقك الشامل لتخطيط الامتحانات.</string>
+    <string name="choose_theme">اختر السمة</string>
+    <string name="choose_language">اختر اللغة</string>
+    <string name="theme_system_default">افتراضي النظام</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="sound_default">افتراضي</string>
+    <string name="sound_custom">مخصص</string>
+    <string name="select_notification_sound">اختر صوت الإشعار</string>
+    <string name="version_label">الإصدار 1.01</string>
+    <string name="build_by">تطوير Fussy0064</string>
+
+    <string name="channel_task_reminders">تذكيرات المهام</string>
+    <string name="channel_task_reminders_desc">تذكيرات بمهامك</string>
+    <string name="channel_exam_alerts">تنبيهات الامتحانات</string>
+    <string name="channel_exam_alerts_desc">تنبيهات العد التنازلي للامتحانات القادمة</string>
+
+    <string-array name="theme_options">
+        <item>افتراضي النظام</item>
+        <item>فاتح</item>
+        <item>داكن</item>
+    </string-array>
+
+    <plurals name="file_count">
+        <item quantity="one">ملف %d</item>
+        <item quantity="two">ملفان %d</item>
+        <item quantity="few">%d ملفات</item>
+        <item quantity="many">%d ملفًا</item>
+        <item quantity="other">%d ملف</item>
+    </plurals>
+</resources>

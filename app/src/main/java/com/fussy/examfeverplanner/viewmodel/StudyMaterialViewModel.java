@@ -22,6 +22,10 @@ public class StudyMaterialViewModel extends AndroidViewModel {
         return repository.getMaterialsBySubject(subjectId);
     }
 
+    public LiveData<List<StudyMaterial>> getAllMaterials() {
+        return repository.getAllMaterials();
+    }
+
     public void insert(StudyMaterial material) {
         repository.insert(material);
     }

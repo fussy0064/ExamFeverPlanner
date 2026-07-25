@@ -37,12 +37,12 @@ public class TopicsActivity extends BaseActivity {
         }
         String subjectName = intent.getStringExtra(EXTRA_SUBJECT_NAME);
         if (subjectName == null)
-            subjectName = "Topics";
+            subjectName = getString(R.string.topics_title_fallback);
 
         Toolbar toolbar = findViewById(R.id.toolbar_topics);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(subjectName + " Topics");
+            getSupportActionBar().setTitle(getString(R.string.topics_of_subject, subjectName));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -87,7 +87,7 @@ public class TopicsActivity extends BaseActivity {
 
         TextInputEditText editTextTopicName = dialogView.findViewById(R.id.edit_text_topic_name);
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_add, (dialog, which) -> {
             String topicName = editTextTopicName.getText().toString().trim();
             if (!topicName.isEmpty()) {
                 Topic newTopic = new Topic(topicName, subjectId);
@@ -95,7 +95,7 @@ public class TopicsActivity extends BaseActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
@@ -108,13 +108,13 @@ public class TopicsActivity extends BaseActivity {
         // Update heading label if present
         TextView tvHeading = dialogView.findViewById(R.id.tv_dialog_topic_title);
         if (tvHeading != null)
-            tvHeading.setText("Edit Topic");
+            tvHeading.setText(R.string.edit_topic);
 
         TextInputEditText editTextTopicName = dialogView.findViewById(R.id.edit_text_topic_name);
         editTextTopicName.setText(topic.getName());
         editTextTopicName.setSelection(topic.getName().length()); // cursor at end
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton(R.string.action_save, (dialog, which) -> {
             String newName = editTextTopicName.getText().toString().trim();
             if (!newName.isEmpty()) {
                 topic.setName(newName);
@@ -122,7 +122,7 @@ public class TopicsActivity extends BaseActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 }
