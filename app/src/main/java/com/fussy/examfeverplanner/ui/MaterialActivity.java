@@ -176,15 +176,16 @@ public class MaterialActivity extends BaseActivity {
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subjectSpinner.setAdapter(subjectAdapter);
 
-        int startIndex = 0;
+        int startIndexTmp = 0;
         if (preselectSubjectId != null) {
             for (int i = 0; i < allSubjects.size(); i++) {
                 if (allSubjects.get(i).getId() == preselectSubjectId) {
-                    startIndex = i;
+                    startIndexTmp = i;
                     break;
                 }
             }
         }
+        final int startIndex = startIndexTmp;
         if (!allSubjects.isEmpty())
             subjectSpinner.setSelection(startIndex);
 
